@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TexFieldWidget extends StatelessWidget {
-  const TexFieldWidget({
+class TextFieldWidget extends StatelessWidget {
+  const TextFieldWidget({
     super.key,
     required this.controller,
   });

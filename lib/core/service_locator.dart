@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:realm/realm.dart';
+import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
@@ -19,4 +20,6 @@ void setupServiceLocator() {
 
   // Регистрация BLoC
   getIt.registerFactory(() => ProjectBloc(getIt<ProjectRepo>()));
+  // Регистрация SubPickCubit
+  getIt.registerFactory(() => SubPickCubit());
 }

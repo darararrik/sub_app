@@ -13,15 +13,6 @@ class ProjectAddedState extends ProjectState {
   List<Object?> get props => [];
 }
 
-// Состояние загрузки субтитров
-class SubtitlesLoadedState extends ProjectState {
-  final List<Subtitle> subtitles;
-
-  SubtitlesLoadedState({required this.subtitles});
-
-  @override
-  List<Object?> get props => [subtitles];
-}
 
 // Состояние ошибки
 class ProjectErrorState extends ProjectState {
@@ -41,4 +32,9 @@ class ProjectsLoadedState extends ProjectState {
 
   @override
   List<Object?> get props => [projects];
+}
+
+class ProjectLoadingState extends ProjectState {
+  @override
+  List<Object?> get props => [];
 }
