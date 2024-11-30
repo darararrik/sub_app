@@ -12,11 +12,11 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
 
   Project(
     String id,
-    String name, {
-    String? engSubtitleFilePath,
-    String? japSubtitleFilePath,
-    Iterable<String> translatedSubtitles = const [],
-    String? status = "Не переведено",
+    String name,
+    String engSubtitleFilePath, {
+    Map<String, String> translatedSubtitles = const {},
+    Map<String, String> syllables = const {},
+    String status = "Не переведено",
     Iterable<int> imageBytes = const [],
   }) {
     if (!_defaultsSet) {
@@ -27,9 +27,10 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'engSubtitleFilePath', engSubtitleFilePath);
-    RealmObjectBase.set(this, 'japSubtitleFilePath', japSubtitleFilePath);
-    RealmObjectBase.set<RealmList<String>>(
-        this, 'translatedSubtitles', RealmList<String>(translatedSubtitles));
+    RealmObjectBase.set<RealmMap<String>>(
+        this, 'translatedSubtitles', RealmMap<String>(translatedSubtitles));
+    RealmObjectBase.set<RealmMap<String>>(
+        this, 'syllables', RealmMap<String>(syllables));
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set<RealmList<int>>(
         this, 'imageBytes', RealmList<int>(imageBytes));
@@ -48,31 +49,31 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
   set name(String value) => RealmObjectBase.set(this, 'name', value);
 
   @override
-  String? get engSubtitleFilePath =>
-      RealmObjectBase.get<String>(this, 'engSubtitleFilePath') as String?;
+  String get engSubtitleFilePath =>
+      RealmObjectBase.get<String>(this, 'engSubtitleFilePath') as String;
   @override
-  set engSubtitleFilePath(String? value) =>
+  set engSubtitleFilePath(String value) =>
       RealmObjectBase.set(this, 'engSubtitleFilePath', value);
 
   @override
-  String? get japSubtitleFilePath =>
-      RealmObjectBase.get<String>(this, 'japSubtitleFilePath') as String?;
-  @override
-  set japSubtitleFilePath(String? value) =>
-      RealmObjectBase.set(this, 'japSubtitleFilePath', value);
-
-  @override
-  RealmList<String> get translatedSubtitles =>
+  RealmMap<String> get translatedSubtitles =>
       RealmObjectBase.get<String>(this, 'translatedSubtitles')
-          as RealmList<String>;
+          as RealmMap<String>;
   @override
-  set translatedSubtitles(covariant RealmList<String> value) =>
+  set translatedSubtitles(covariant RealmMap<String> value) =>
       throw RealmUnsupportedSetError();
 
   @override
-  String? get status => RealmObjectBase.get<String>(this, 'status') as String?;
+  RealmMap<String> get syllables =>
+      RealmObjectBase.get<String>(this, 'syllables') as RealmMap<String>;
   @override
-  set status(String? value) => RealmObjectBase.set(this, 'status', value);
+  set syllables(covariant RealmMap<String> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  String get status => RealmObjectBase.get<String>(this, 'status') as String;
+  @override
+  set status(String value) => RealmObjectBase.set(this, 'status', value);
 
   @override
   RealmList<int> get imageBytes =>
@@ -97,8 +98,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       'id': id.toEJson(),
       'name': name.toEJson(),
       'engSubtitleFilePath': engSubtitleFilePath.toEJson(),
-      'japSubtitleFilePath': japSubtitleFilePath.toEJson(),
       'translatedSubtitles': translatedSubtitles.toEJson(),
+      'syllables': syllables.toEJson(),
       'status': status.toEJson(),
       'imageBytes': imageBytes.toEJson(),
     };
@@ -111,14 +112,15 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       {
         'id': EJsonValue id,
         'name': EJsonValue name,
+        'engSubtitleFilePath': EJsonValue engSubtitleFilePath,
       } =>
         Project(
           fromEJson(id),
           fromEJson(name),
-          engSubtitleFilePath: fromEJson(ejson['engSubtitleFilePath']),
-          japSubtitleFilePath: fromEJson(ejson['japSubtitleFilePath']),
+          fromEJson(engSubtitleFilePath),
           translatedSubtitles:
-              fromEJson(ejson['translatedSubtitles'], defaultValue: const []),
+              fromEJson(ejson['translatedSubtitles'], defaultValue: const {}),
+          syllables: fromEJson(ejson['syllables'], defaultValue: const {}),
           status: fromEJson(ejson['status'], defaultValue: "Не переведено"),
           imageBytes: fromEJson(ejson['imageBytes']),
         ),
@@ -130,15 +132,14 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.registerFactory(Project._);
     register(_toEJson, _fromEJson);
     return const SchemaObject(ObjectType.realmObject, Project, 'Project', [
-      SchemaProperty('id', RealmPropertyType.string),
+      SchemaProperty('id', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
-      SchemaProperty('engSubtitleFilePath', RealmPropertyType.string,
-          optional: true),
-      SchemaProperty('japSubtitleFilePath', RealmPropertyType.string,
-          optional: true),
+      SchemaProperty('engSubtitleFilePath', RealmPropertyType.string),
       SchemaProperty('translatedSubtitles', RealmPropertyType.string,
-          collectionType: RealmCollectionType.list),
-      SchemaProperty('status', RealmPropertyType.string, optional: true),
+          collectionType: RealmCollectionType.map),
+      SchemaProperty('syllables', RealmPropertyType.string,
+          collectionType: RealmCollectionType.map),
+      SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('imageBytes', RealmPropertyType.int,
           collectionType: RealmCollectionType.list),
     ]);

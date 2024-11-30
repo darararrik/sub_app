@@ -20,10 +20,9 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   void _onCreateProject(CreateProjectEvent event, Emitter<ProjectState> emit) {
     try {
       final imageBytes = event.imageFile.readAsBytesSync();
-      final newProject = Project(ObjectId().toString(), event.name,
-          engSubtitleFilePath: event.engSubtitleFilePath,
-          translatedSubtitles: [],
-          imageBytes: imageBytes);
+      final newProject = Project(
+          ObjectId().toString(), event.name, event.engSubtitleFilePath,
+          translatedSubtitles: {}, syllables: {}, imageBytes: imageBytes);
       repo.createProject(newProject);
       emit(ProjectAddedState());
     } catch (e) {

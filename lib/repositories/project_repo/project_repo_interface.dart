@@ -6,4 +6,5 @@ abstract interface class IProjectRepo {
   void deleteAllProjects();
   List<Project> getAllProjects();
   void updateProject(Project project, {String? newName, String? newFilePath});
+  Project? getProject(Project project);
 }

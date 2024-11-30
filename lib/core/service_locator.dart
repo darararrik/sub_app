@@ -5,6 +5,7 @@ import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
+import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -21,6 +22,8 @@ void setupServiceLocator() {
 
   // Регистрация BLoC
   getIt.registerFactory(() => ProjectBloc(getIt<ProjectRepo>()));
+  getIt.registerFactory(() => SubtitlesBloc(getIt<ProjectRepo>()));
+
   // Регистрация SubPickCubit
   getIt.registerFactory(() => SubPickCubit());
   getIt.registerFactory(() => PickImageCubit());

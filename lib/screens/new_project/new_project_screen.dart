@@ -13,10 +13,10 @@ class NewProjectScreen extends StatefulWidget {
   const NewProjectScreen({super.key});
 
   @override
-  _NewProjectScreenState createState() => _NewProjectScreenState();
+  NewProjectScreenState createState() => NewProjectScreenState();
 }
 
-class _NewProjectScreenState extends State<NewProjectScreen> {
+class NewProjectScreenState extends State<NewProjectScreen> {
   final TextEditingController nameController = TextEditingController();
   String engFilePath = "";
   String selectedStatus = "Не переведено";
@@ -109,8 +109,7 @@ class _NewProjectScreenState extends State<NewProjectScreen> {
                   const SizedBox(height: 32),
                   const Text(
                     "Субтитры",
-                    style: TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),
                   Row(

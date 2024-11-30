@@ -36,25 +36,27 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         child: CustomScrollView(
           slivers: [
             _appBar(),
-            SliverToBoxAdapter(
-              child: BlocBuilder<ProjectBloc, ProjectState>(
-                builder: (context, state) {
-                  if (state is ProjectLoadingState) {
-                    return _loadingState();
-                  }
-                  if (state is ProjectsLoadedState) {
-                    final projects = state.projects;
-
-                    if (projects.isEmpty) {
-                      return _listEmptyState();
+            SliverFillRemaining(
+              child: SingleChildScrollView(
+                child: BlocBuilder<ProjectBloc, ProjectState>(
+                  builder: (context, state) {
+                    if (state is ProjectLoadingState) {
+                      return _loadingState();
                     }
-                    return _listNotEmpty(projects);
-                  }
-                  if (state is ProjectErrorState) {
-                    return _errorState(state);
-                  }
-                  return const SizedBox();
-                },
+                    if (state is ProjectsLoadedState) {
+                      final projects = state.projects;
+
+                      if (projects.isEmpty) {
+                        return _listEmptyState();
+                      }
+                      return _listNotEmpty(projects);
+                    }
+                    if (state is ProjectErrorState) {
+                      return _errorState(state);
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ),
             ),
           ],

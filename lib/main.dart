@@ -4,6 +4,7 @@ import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
 import 'package:sub_app/core/service_locator.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
+import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
 import 'package:sub_app/screens/projects/projects_screen.dart';
 import 'package:sub_app/core/theme.dart';
 
@@ -22,6 +23,7 @@ class SubApp extends StatelessWidget {
       providers: [
         // Получение ProjectBloc через GetIt
         BlocProvider(create: (context) => getIt<ProjectBloc>()),
+        BlocProvider(create: (context) => getIt<SubtitlesBloc>()),
         BlocProvider(create: (context) => getIt<PickImageCubit>()),
         BlocProvider(create: (context) => getIt<SubPickCubit>()),
       ],

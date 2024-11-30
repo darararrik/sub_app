@@ -4,13 +4,14 @@ part 'project_model.realm.dart';
 
 @RealmModel()
 class _Project {
+  @PrimaryKey()
   late String id;
   late String name; // Название проекта
-  String? engSubtitleFilePath; // Путь к файлу субтитров
-  String? japSubtitleFilePath; // Путь к файлу субтитров
+  late String engSubtitleFilePath; // Путь к файлу субтитров
+  Map<String, String> translatedSubtitles = {}; // Переведённые субтитры
+  Map<String, String> syllables = {}; // Переведённые субтитры
 
-  List<String> translatedSubtitles = []; // Переведённые субтитры
-  late String? status = "Не переведено";
+  late String status = "Не переведено";
 
   late List<int> imageBytes; // Массив байтов для изображения
 }

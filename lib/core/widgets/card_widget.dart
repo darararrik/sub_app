@@ -13,16 +13,20 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        MaterialPageRoute(builder: (context) => const ProjectScreen());
-      },
-      child: Container(
-        margin: const EdgeInsets.only(right: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
+    return Container(
+      margin: const EdgeInsets.only(right: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  ProjectScreen(project: project),
+                  ));
+            },
+            child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: SizedBox(
                   width: 116,
@@ -33,15 +37,15 @@ class CardWidget extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              project.name,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            project.name,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
     );
   }
