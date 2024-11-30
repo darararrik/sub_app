@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,8 +19,11 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   // Логика добавления проекта
   void _onCreateProject(CreateProjectEvent event, Emitter<ProjectState> emit) {
     try {
+      final imageBytes = event.imageFile.readAsBytesSync();
       final newProject = Project(ObjectId().toString(), event.name,
-          subtitleFilePath: event.subtitleFilePath, translatedSubtitles: []);
+          engSubtitleFilePath: event.engSubtitleFilePath,
+          translatedSubtitles: [],
+          imageBytes: imageBytes);
       repo.createProject(newProject);
       emit(ProjectAddedState());
     } catch (e) {

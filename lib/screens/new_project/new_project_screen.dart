@@ -1,19 +1,34 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
 import 'package:sub_app/core/widgets/tex_field_widget.dart';
+import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
+import 'package:sub_app/screens/new_project/widgets/pick_image_card.dart';
 
-class NewProjectScreen extends StatelessWidget {
+class NewProjectScreen extends StatefulWidget {
+  const NewProjectScreen({super.key});
+
+  @override
+  _NewProjectScreenState createState() => _NewProjectScreenState();
+}
+
+class _NewProjectScreenState extends State<NewProjectScreen> {
   final TextEditingController nameController = TextEditingController();
-  NewProjectScreen({super.key});
+  String engFilePath = "";
+  String selectedStatus = "Не переведено";
+  File? imageFile;
+  @override
+  void initState() {
+    super.initState();
+    context.read<PickImageCubit>().resetState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    String filePath = "";
-    String selectedStatus = "Created"; // Дефолтный статус
-
     return Scaffold(
       appBar: AppBar(title: const Text("Новый проект")),
       body: BlocListener<ProjectBloc, ProjectState>(
@@ -32,89 +47,154 @@ class NewProjectScreen extends StatelessWidget {
         },
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: BlocBuilder<PickImageCubit, PickImageState>(
+            builder: (context, state) {
+              if (state is ImagePicked) {
+                imageFile = state.image;
+              }
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      //TODO: Доделать реализацию
-                    },
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                            "https://via.placeholder.com/116x176")),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Expanded(
-                      child: Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextFieldWidget(controller: nameController),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      PickImageCard(imageFile: imageFile),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Column(
                         children: [
-                          const Text("Статус:"),
-                          DropdownMenu(
-                            label: const Text("Выбери статус проекта"),
-                            onSelected: (value) => selectedStatus = value!,
-                            dropdownMenuEntries: const <DropdownMenuEntry<
-                                String>>[
-                              DropdownMenuEntry(
-                                  value: "Созданный", label: "Созданный"),
-                              DropdownMenuEntry(
-                                  value: "В процессе", label: "В процессе"),
-                              DropdownMenuEntry(
-                                  value: "Переведено", label: "Переведено"),
+                          TextFieldWidget(controller: nameController),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  softWrap: true, // Включаем перенос текста
+                                  "Статус проекта:",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              DropdownButton<String>(
+                                value: selectedStatus,
+                                items: <String>[
+                                  'Не переведено',
+                                  'В процессе',
+                                  'Переведено'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedStatus = newValue!;
+                                  });
+                                },
+                              ),
                             ],
                           ),
                         ],
+                      )),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  const Text(
+                    "Субтитры",
+                    style: TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Английские субтитры ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          if (engFilePath.isNotEmpty) ...[
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              engFilePath
+                                  .split('/')
+                                  .last, // Показывает только имя файла
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                            ),
+                          ]
+                        ],
+                      ),
+                      IconButton(
+                        tooltip: "Выбрать субтитры",
+                        icon: const Icon(
+                          Icons.upload_rounded,
+                          size: 32,
+                        ),
+                        onPressed: () async {
+                          final result = await FilePicker.platform.pickFiles();
+                          if (result != null && result.files.isNotEmpty) {
+                            engFilePath = result.files.single.path!;
+                            context
+                                .read<SubPickCubit>()
+                                .loadSubtitles(engFilePath);
+                            setState(() {});
+                          }
+                        },
                       ),
                     ],
-                  )),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
                 ],
+              );
+            },
+          ),
+        ),
+      ),
+      floatingActionButton: SizedBox(
+        width: 180,
+        child: FloatingActionButton(
+          onPressed: () {
+            final name = nameController.text.trim();
+            // Validate if both name and subtitle file are provided
+            if (name.isNotEmpty && engFilePath.isNotEmpty) {
+              context.read<ProjectBloc>().add(
+                    CreateProjectEvent(
+                      name: name,
+                      engSubtitleFilePath: engFilePath,
+                      status: selectedStatus,
+                      imageFile: imageFile!, // Передача выбранного статуса
+                    ),
+                  );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Заполните все поля!")),
+              );
+            }
+          },
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check),
+              SizedBox(
+                width: 12,
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  final result = await FilePicker.platform.pickFiles();
-
-                  if (result != null && result.files.isNotEmpty) {
-                    filePath = result.files.single.path!;
-                    context.read<SubPickCubit>().loadSubtitles(filePath);
-                  }
-                },
-                child: const Text("Выбрать файл субтитров"),
-              ),
-              BlocBuilder<SubPickCubit, SubPickState>(
-                builder: (context, state) {
-                  if (state is SubPickLoaded) {
-                    return Text(
-                        "Субтитров загружено: ${state.subtitles.length}");
-                  }
-                  return const SizedBox();
-                },
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () {
-                  final name = nameController.text.trim();
-                  if (name.isNotEmpty) {
-                    context.read<ProjectBloc>().add(
-                          CreateProjectEvent(
-                            name: name,
-                            subtitleFilePath: filePath,
-                            status:
-                                selectedStatus, // Передача выбранного статуса
-                          ),
-                        );
-                  }
-                },
-                child: const Text("Создать проект"),
-              ),
+              Text("Создать проект"),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:realm/realm.dart';
@@ -25,16 +26,16 @@ class ProjectRepo implements IProjectRepo {
     }
     // Копируем файл субтитров из оригинального местоположения в защищённую папку
     try {
-      final subtitleFile = File(newProject.subtitleFilePath!);
+      final subtitleFile = File(newProject.engSubtitleFilePath!);
       if (await subtitleFile.exists()) {
         // Копирование файла
         await subtitleFile.copy(newSubtitlePath);
       }
     } on PlatformException catch (e) {
       // Обработка ошибок
-      print("Ошибка при копировании файла: $e");
+      debugPrint("Ошибка при копировании файла: $e");
     }
-    newProject.subtitleFilePath = newSubtitlePath;
+    newProject.engSubtitleFilePath = newSubtitlePath;
 
     // Сохраняем проект в Realm
     realm.write(() => realm.add(newProject));
@@ -66,7 +67,7 @@ class ProjectRepo implements IProjectRepo {
         project.name = newName;
       }
       if (newFilePath != null) {
-        project.subtitleFilePath = newFilePath;
+        project.engSubtitleFilePath = newFilePath;
       }
     });
   }

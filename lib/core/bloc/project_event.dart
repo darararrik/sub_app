@@ -5,16 +5,19 @@ sealed class ProjectEvent extends Equatable {}
 // Событие для добавления проекта
 class CreateProjectEvent extends ProjectEvent {
   final String name;
-  final String subtitleFilePath;
+  final String engSubtitleFilePath;
+
   final String status;
+  final File imageFile;
   CreateProjectEvent({
+    required this.imageFile,
     required this.name,
-    required this.subtitleFilePath,
+    required this.engSubtitleFilePath,
     required this.status,
   });
 
   @override
-  List<Object?> get props => [name, subtitleFilePath, status];
+  List<Object?> get props => [name, engSubtitleFilePath, status];
 }
 
 // Событие для загрузки списка проектов
