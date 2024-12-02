@@ -41,10 +41,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        subtitle.data,
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w600),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Text(
+                          subtitle.data,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w500),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       TextField(

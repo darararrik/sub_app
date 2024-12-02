@@ -14,13 +14,13 @@ class TextFieldWidget extends StatelessWidget {
       controller: controller,
       decoration: const InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
             borderSide: BorderSide(
-              width: 1,
-            ), // Цвет полоски при фокусе (не изменяется)
+                width: 1,
+                color: Colors.grey), // Цвет полоски при фокусе (не изменяется)
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
             borderSide: BorderSide(
               width: 1,
             ), // Цвет полоски при фокусе (не изменяется)

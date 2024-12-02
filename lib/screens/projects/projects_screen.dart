@@ -36,27 +36,53 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         child: CustomScrollView(
           slivers: [
             _appBar(),
-            SliverFillRemaining(
-              child: SingleChildScrollView(
-                child: BlocBuilder<ProjectBloc, ProjectState>(
-                  builder: (context, state) {
-                    if (state is ProjectLoadingState) {
-                      return _loadingState();
+            SliverToBoxAdapter(
+              child: BlocBuilder<ProjectBloc, ProjectState>(
+                builder: (context, state) {
+                  if (state is ProjectLoadingState) {
+                    return _loadingState();
+                  }
+                  if (state is ProjectsLoadedState) {
+                    final projects = state.projects;
+                    if (projects.isNotEmpty) {
+                      final projectsN = projects
+                          .where((project) => project.status == "Не переведено")
+                          .toList();
+                      final projectsI = projects
+                          .where((project) => project.status == "В процессе")
+                          .toList();
+                      final projectsT = projects
+                          .where((project) => project.status == "Переведено")
+                          .toList();
+                      return Column(
+                        children: [
+                          HorizntalListProjects(
+                            projects: projectsN,
+                            name: 'Не переведено',
+                          ),
+                          if (projectsI.isNotEmpty) ...[
+                            HorizntalListProjects(
+                              projects: projectsN,
+                              name: 'В процессе',
+                            ),
+                          ],
+                          if (projectsT.isNotEmpty) ...[
+                            HorizntalListProjects(
+                              projects: projectsN,
+                              name: 'Переведено',
+                            ),
+                          ]
+                        ],
+                      );
+                    } else {
+                      return _listEmptyState();
                     }
-                    if (state is ProjectsLoadedState) {
-                      final projects = state.projects;
-
-                      if (projects.isEmpty) {
-                        return _listEmptyState();
-                      }
-                      return _listNotEmpty(projects);
-                    }
-                    if (state is ProjectErrorState) {
-                      return _errorState(state);
-                    }
-                    return const SizedBox();
-                  },
-                ),
+                  }
+                  if (state is ProjectErrorState) {
+                    return _errorState(state);
+                  }
+                  return const SizedBox();
+                },
               ),
             ),
           ],
@@ -71,21 +97,6 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       child: Text(
         'Ошибка: ${state.errorMessage}',
         style: const TextStyle(color: Colors.red),
-      ),
-    );
-  }
-
-  SizedBox _listNotEmpty(List<Project> projects) {
-    return SizedBox(
-      height: 500,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        scrollDirection: Axis.horizontal,
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          final project = projects[index];
-          return CardWidget(project: project);
-        },
       ),
     );
   }
@@ -120,30 +131,72 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   }
 }
 
-Center _listEmptyState() {
-  return const Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Пока что здесь пусто!',
-          style: TextStyle(fontSize: 45),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 12),
-        Text(
-          'Создайте новый проект',
-          style: TextStyle(fontSize: 20),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    ),
+class HorizntalListProjects extends StatelessWidget {
+  const HorizntalListProjects({
+    super.key,
+    required this.projects,
+    required this.name,
+  });
+  final String name;
+  final List<Project> projects;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54),
+          ),
+          SizedBox(
+            height: 240,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 4),
+              scrollDirection: Axis.horizontal,
+              itemCount: projects.length,
+              itemBuilder: (context, index) {
+                final project = projects[index];
+                return CardWidget(project: project);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Column _listEmptyState() {
+  return const Column(
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(
+        'Пока что здесь пусто!',
+        style: TextStyle(fontSize: 45),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 12),
+      Text(
+        'Создайте новый проект',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ),
+    ],
   );
 }
 
 SliverAppBar _appBar() {
   return const SliverAppBar(
-    title: Text("Проекты"),
+    title: Text(
+      "Переводы",
+    ),
     pinned: true,
   );
 }
