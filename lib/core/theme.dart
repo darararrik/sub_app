@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
-    appBarTheme: AppBarTheme(
-        iconTheme: const IconThemeData(color: Colors.white),
-        color: primaryColor,
-        titleTextStyle: const TextStyle(
-            fontWeight: FontWeight.w400, color: Colors.white, fontSize: 22)),
+    scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+        surfaceTintColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        color: Colors.white,
+        titleTextStyle: TextStyle(
+            fontWeight: FontWeight.w400, color: Colors.black, fontSize: 22)),
     colorScheme: const ColorScheme.light(
       primary: Color(
           0xFF3B3B3B), // Основной цвет (будет использован вместо accentColor)
@@ -17,4 +19,4 @@ final lightTheme = ThemeData(
       onSurface: Color(0xFF1c1b1b), // Цвет текста на поверхности
       onError: Color(0xFFFFFFFF), // Цвет текста на фоне ошибки),
     ));
-final primaryColor = const Color(0xFF3B3B3B);
+const primaryColor = Color(0xFF3B3B3B);

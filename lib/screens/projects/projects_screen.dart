@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
+import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
 import 'package:sub_app/core/widgets/card_widget.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/new_project/new_project_screen.dart';
@@ -36,6 +37,10 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         child: CustomScrollView(
           slivers: [
             _appBar(),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: ShadowHeaderDelegate(),
+            ),
             SliverToBoxAdapter(
               child: BlocBuilder<ProjectBloc, ProjectState>(
                 builder: (context, state) {
