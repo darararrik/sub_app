@@ -9,7 +9,6 @@ import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
 import 'package:sub_app/core/widgets/tex_field_widget.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/new_project/widgets/pick_image_card.dart';
-import 'package:sub_app/screens/project/project_screen.dart';
 
 class NewProjectScreen extends StatefulWidget {
   const NewProjectScreen({super.key});
