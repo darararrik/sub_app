@@ -32,80 +32,58 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SubtitlesBloc, SubtitlesState>(
-      listener: (context, state) {
-        if (state is SubtitlesLoaded) {
-          // Переносим данные из проекта в локальную Map
-          translatedSubtitles = {
-            for (var entry in state.project.translatedWords.entries)
-              int.parse(entry.key): entry.value
-          };
-        }
+    return PopScope(
+      onPopInvokedWithResult: (bool pop, dynamic) {
+        // Сохраняем прогресс при выходе
+        context.read<SubtitlesBloc>().add(Save(
+              project: widget.project,
+              translatedData: translatedSubtitles,
+            ));
+        return;
       },
-      child: PopScope(
-        onPopInvokedWithResult: (bool pop, dynamic) async {
-          // Сохраняем прогресс при выходе
-          context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
-                project: widget.project,
-                translatedData: translatedSubtitles,
-              ));
-          return;
-        },
-        child: Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                title: Text(widget.project.name),
-                pinned: true,
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          "Сохранить",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w500),
-                        )),
-                  )
-                ],
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: ShadowHeaderDelegate(),
-              ),
-              BlocBuilder<SubtitlesBloc, SubtitlesState>(
-                builder: (context, state) {
-                  if (state is SubtitlesLoaded) {
-                    return _buildSubtitleList(state.engSubtitles,
-                        translatedSubtitles, widget.project);
-                  }
-                  if (state is Loading) {
-                    return const SliverToBoxAdapter(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                  if (state is SubtitlesError) {
-                    return SliverToBoxAdapter(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
-                    );
-                  }
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.project.name),
+          elevation: 4,
+          shadowColor: const Color.fromRGBO(0, 0, 0, 0.2),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Сохранить",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
+                  )),
+            )
+          ],
+        ),
+        body: BlocBuilder<SubtitlesBloc, SubtitlesState>(
+          builder: (context, state) {
+            if (state is SubtitlesLoaded) {
+              translatedSubtitles = state.translatedWords;
 
-                  return const SliverToBoxAdapter(
-                    child: Center(
-                      child: Text("Неизвестное состояние"),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+              return _buildSubtitleList(
+                  state.engSubtitles, translatedSubtitles, widget.project);
+            }
+            if (state is Loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is SubtitlesError) {
+              return Center(
+                child: Text(state.message),
+              );
+            }
+
+            return const Center(
+              child: Text("Неизвестное состояние"),
+            );
+          },
         ),
       ),
     );
@@ -113,9 +91,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   Widget _buildSubtitleList(List<Subtitle> subtitles,
       Map<int, String> translatedWords, Project project) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      sliver: SliverList.builder(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+      child: ListView.builder(
+        padding: const EdgeInsets.only(top: 24),
         itemCount: subtitles.length,
         itemBuilder: (context, index) {
           return CardSubtitleWidget(

@@ -21,10 +21,13 @@ class CardSubtitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocProvider(
       create: (_) => CardSubtitleCubit(),
       child: BlocBuilder<CardSubtitleCubit, bool>(
+        
         builder: (context, isExpanded) {
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

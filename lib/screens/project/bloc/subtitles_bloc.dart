@@ -11,21 +11,20 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
   final IProjectRepo repo;
 
   SubtitlesBloc(this.repo) : super(SubtitlesInitial()) {
+    on<SaveSubtitlesToFile>(_fileSave);
     on<LoadSubtitles>(_loadSubtitles);
-    on<SaveSubtitlesToFile>(_localeSave);
+    on<Save>(_localeSave);
   }
 
   // Сохранение переведённых субтитров
-  FutureOr<void> _localeSave(SaveSubtitlesToFile event, emit) async {
+  FutureOr<void> _localeSave(Save event, emit) async {
     if (state is SubtitlesLoaded) {
       try {
         final project = event.project;
-        final loadedState = state as SubtitlesLoaded;
         final Map<String, String> updatedTranslations = {
           for (var entry in event.translatedData.entries)
             entry.key.toString(): entry.value
         };
-
         // Сохраняем перевод в проект
         repo.updateTranslationProgress(
             project, updatedTranslations, "В процессе");
@@ -59,9 +58,44 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
         ),
       );
       await controller.initial();
-      emit(SubtitlesLoaded(controller.subtitles, event.project));
+      final translatedWord = {
+        for (var entry in event.project.translatedWords.entries)
+          int.parse(entry.key): entry.value
+      };
+
+      emit(SubtitlesLoaded(controller.subtitles, translatedWord));
     } catch (e) {
       emit(SubtitlesError('Ошибка при загрузке субтитров: $e'));
+    }
+  }
+
+  FutureOr<void> _fileSave(
+      SaveSubtitlesToFile event, Emitter<SubtitlesState> emit) async {
+    try {
+      final loadedState = state as SubtitlesLoaded;
+      final StringBuffer buffer = StringBuffer();
+      String translation;
+      Map<String, String> updatedTranslations = {};
+
+      for (var subtitle in loadedState.engSubtitles) {
+        translation =
+            event.project.translatedWords[(subtitle.index - 1).toString()] ??
+                "";
+        updatedTranslations[subtitle.index.toString()] = translation;
+
+        buffer.writeln(subtitle.index);
+        buffer.writeln('${subtitle.start} --> ${subtitle.end}');
+        buffer.writeln(translation.isNotEmpty ? translation : subtitle.data);
+        buffer.writeln();
+      }
+
+      final directory = await getDownloadsDirectory();
+      if (directory != null) {
+        final file = File('${directory.path}/${event.project.name}.srt');
+        await file.writeAsString(buffer.toString(), mode: FileMode.write);
+      }
+    } catch (e) {
+      emit(SubtitlesError('Ошибка при сохранении файла: $e'));
     }
   }
 }

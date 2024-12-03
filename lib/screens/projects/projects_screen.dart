@@ -7,6 +7,8 @@ import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
 import 'package:sub_app/core/widgets/card_widget.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/new_project/new_project_screen.dart';
+import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
+import 'package:sub_app/screens/project/bloc/subtitles_event.dart';
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});
@@ -188,7 +190,30 @@ class HorizntalListProjects extends StatelessWidget {
               itemCount: projects.length,
               itemBuilder: (context, index) {
                 final project = projects[index];
-                return CardWidget(project: project);
+                return GestureDetector(
+                    onLongPress: () {
+                      showMenu(
+                        context: context,
+                        position: const RelativeRect.fromLTRB(
+                            100, 100, 100, 100), // Adjust position as needed
+                        items: [
+                          PopupMenuItem<String>(
+                            value: 'Option1',
+                            onTap: () {
+                              context
+                                  .read<SubtitlesBloc>()
+                                  .add(SaveSubtitlesToFile(project: project));
+                            },
+                            child: const Text('Импортировать'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'Option2',
+                            child: Text('Изменить прогресс'),
+                          ),
+                        ],
+                      );
+                    },
+                    child: CardWidget(project: project));
               },
             ),
           ),
