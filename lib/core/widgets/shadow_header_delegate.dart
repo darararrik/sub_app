@@ -8,10 +8,10 @@ class ShadowHeaderDelegate extends SliverPersistentHeaderDelegate {
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.06), // Настройте цвет тени
+            color: Color.fromRGBO(0, 0, 0, 0.08), // Настройте цвет тени
             offset: Offset(0, 4),
-            spreadRadius: 4,
-            blurRadius: 12,
+            spreadRadius: 0,
+            blurRadius: 4,
           ),
         ],
       ),

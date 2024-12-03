@@ -15,23 +15,29 @@ class TranslateInputWidget extends StatelessWidget {
             //translation[index.toString()] = value;
           },
           decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color(0xFF6E6E6E),
-                width: 1, // Ширина границы
+              fillColor:  const Color.fromARGB(176, 246, 246, 246),
+              filled: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(0, 110, 110, 110),
+                  width: 1, // Ширина границы
+                ),
               ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color(0xFF6E6E6E), // Цвет границы в активном состоянии
-                width: 1, // Ширина границы при фокусе
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(
+                      0, 110, 110, 110), // Цвет границы в активном состоянии
+                  width: 1, // Ширина границы при фокусе
+                ),
               ),
-            ),
-            hintText: "Введите перевод",
-            labelText: "Перевод",
-          ),
+              hintText: "Введите перевод",
+              labelText: "Перевод",
+              labelStyle:
+                  const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              hintStyle:
+                  const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
         ),
       ),
     );

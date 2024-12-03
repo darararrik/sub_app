@@ -12,14 +12,14 @@ class SubtitleDataWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        padding: const EdgeInsets.all(12),
         decoration: const BoxDecoration(
-          color: Color(0xFFECECEC),
+          color: Color.fromARGB(176, 246, 246, 246),
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: Text(
           subtitleData,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
         ),
       ),
     );

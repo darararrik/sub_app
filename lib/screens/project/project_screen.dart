@@ -61,7 +61,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   Widget _buildSubtitleList(List<Subtitle> subtitles) {
     return SliverPadding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 24),
       sliver: SliverList.builder(
         itemCount: subtitles.length,
         itemBuilder: (context, index) {
