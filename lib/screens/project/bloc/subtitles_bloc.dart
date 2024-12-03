@@ -12,11 +12,11 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
 
   SubtitlesBloc(this.repo) : super(SubtitlesInitial()) {
     on<LoadSubtitles>(_loadSubtitles);
-    on<SaveSubtitlesToFile>(_save);
+    on<SaveSubtitlesToFile>(_localeSave);
   }
 
   // Сохранение переведённых субтитров
-  FutureOr<void> _save(SaveSubtitlesToFile event, emit) async {
+  FutureOr<void> _localeSave(SaveSubtitlesToFile event, emit) async {
     if (state is SubtitlesLoaded) {
       try {
         final project = event.project;
@@ -29,8 +29,6 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
         // Сохраняем перевод в проект
         repo.updateTranslationProgress(
             project, updatedTranslations, "В процессе");
-
-        emit(SubtitlesSaved());
       } catch (e) {
         emit(SubtitlesError('Ошибка при сохранении файла: $e'));
       }
@@ -40,6 +38,7 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
   // Загрузка субтитров (английских и русских)
   FutureOr<void> _loadSubtitles(LoadSubtitles event, emit) async {
     try {
+      emit(Loading());
       final engSubtitlesPath = event.project.engSubtitleFilePath;
       final directory = await getExternalStorageDirectory();
       if (directory == null) {

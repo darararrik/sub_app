@@ -135,7 +135,7 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  "Английские субтитры ",
+                                  "Файл субтитров ",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500),
@@ -144,12 +144,15 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  Text(
-                                    engFilePath
-                                        .split('/')
-                                        .last, // Показывает только имя файла
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.grey),
+                                  SizedBox(
+                                    width: 300,
+                                    child: Text(
+                                      engFilePath.split('/').last,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                          overflow: TextOverflow.fade),
+                                    ),
                                   ),
                                 ]
                               ],
@@ -198,7 +201,7 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                       name: name,
                       engSubtitleFilePath: engFilePath,
                       status: selectedStatus,
-                      imageFile: imageFile!, // Передача выбранного статуса
+                      imageFile: imageFile, // Передача выбранного статуса
                     ),
                   );
             } else {

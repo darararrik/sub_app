@@ -8,9 +8,9 @@ class CreateProjectEvent extends ProjectEvent {
   final String engSubtitleFilePath;
 
   final String status;
-  final File imageFile;
+  final File? imageFile;
   CreateProjectEvent({
-    required this.imageFile,
+    this.imageFile,
     required this.name,
     required this.engSubtitleFilePath,
     required this.status,

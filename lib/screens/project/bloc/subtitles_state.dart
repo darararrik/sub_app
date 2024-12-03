@@ -22,7 +22,7 @@ class SubtitlesLoaded extends SubtitlesState {
   List<Object?> get props => [engSubtitles, project];
 }
 
-class SubtitlesSaving extends SubtitlesState {}
+class Loading extends SubtitlesState {}
 
 class SubtitlesSaved extends SubtitlesState {}
 
@@ -35,4 +35,3 @@ class SubtitlesError extends SubtitlesState {
   List<Object?> get props => [message];
 }
 
-class SubtitlesLoadingState extends SubtitlesState {}

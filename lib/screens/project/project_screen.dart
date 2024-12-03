@@ -42,14 +42,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
           };
         }
       },
-      child: WillPopScope(
-        onWillPop: () async {
+      child: PopScope(
+        onPopInvokedWithResult: (bool pop, dynamic) async {
           // Сохраняем прогресс при выходе
           context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
                 project: widget.project,
                 translatedData: translatedSubtitles,
               ));
-          return true;
+          return;
         },
         child: Scaffold(
           body: CustomScrollView(
@@ -62,11 +62,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ElevatedButton(
                         onPressed: () {
-                          // Сохранение через кнопку
-                          context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
-                                project: widget.project,
-                                translatedData: translatedSubtitles,
-                              ));
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           "Сохранить",
@@ -85,19 +81,22 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   if (state is SubtitlesLoaded) {
                     return _buildSubtitleList(state.engSubtitles,
                         translatedSubtitles, widget.project);
-                  } else if (state is SubtitlesSaving) {
+                  }
+                  if (state is Loading) {
                     return const SliverToBoxAdapter(
                       child: Center(
                         child: CircularProgressIndicator(),
                       ),
                     );
-                  } else if (state is SubtitlesError) {
+                  }
+                  if (state is SubtitlesError) {
                     return SliverToBoxAdapter(
                       child: Center(
                         child: Text(state.message),
                       ),
                     );
                   }
+
                   return const SliverToBoxAdapter(
                     child: Center(
                       child: Text("Неизвестное состояние"),

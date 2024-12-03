@@ -26,6 +26,21 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          "Переводы",
+        ),
+        elevation: 4,
+        shadowColor: const Color.fromRGBO(0, 0, 0, 0.2),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.account_circle_outlined,
+                size: 32,
+              ))
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           Completer completer = Completer();
@@ -34,65 +49,69 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               .add(GetAllProjectsEvent(completer: completer));
           completer.future;
         },
-        child: CustomScrollView(
-          slivers: [
-            _appBar(),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: ShadowHeaderDelegate(),
-            ),
-            SliverToBoxAdapter(
-              child: BlocBuilder<ProjectBloc, ProjectState>(
-                builder: (context, state) {
-                  if (state is ProjectLoadingState) {
-                    return _loadingState();
-                  }
-                  if (state is ProjectsLoadedState) {
-                    final projects = state.projects;
-                    if (projects.isNotEmpty) {
-                      final projectsN = projects
-                          .where((project) => project.status == "Не переведено")
-                          .toList();
-                      final projectsI = projects
-                          .where((project) => project.status == "В процессе")
-                          .toList();
-                      final projectsT = projects
-                          .where((project) => project.status == "Переведено")
-                          .toList();
-                      return Column(
-                        children: [
-                          if (projectsN.isNotEmpty) ...[
-                            HorizntalListProjects(
-                              projects: projectsN,
-                              name: 'Не переведено',
-                            ),
-                          ],
-                          if (projectsI.isNotEmpty) ...[
-                            HorizntalListProjects(
-                              projects: projectsI,
-                              name: 'В процессе',
-                            ),
-                          ],
-                          if (projectsT.isNotEmpty) ...[
-                            HorizntalListProjects(
-                              projects: projectsT,
-                              name: 'Переведено',
-                            ),
-                          ]
-                        ],
-                      );
-                    } else {
-                      return _listEmptyState();
-                    }
-                  }
-                  if (state is ProjectErrorState) {
-                    return _errorState(state);
-                  }
-                  return const SizedBox();
-                },
-              ),
-            ),
-          ],
+        child: BlocBuilder<ProjectBloc, ProjectState>(
+          builder: (context, state) {
+            if (state is ProjectLoadingState) {
+              return _loadingState();
+            }
+            if (state is ProjectsLoadedState) {
+              final projects = state.projects;
+              final projectsN = projects
+                  .where((project) => project.status == "Не переведено")
+                  .toList();
+              final projectsI = projects
+                  .where((project) => project.status == "В процессе")
+                  .toList();
+              final projectsT = projects
+                  .where((project) => project.status == "Переведено")
+                  .toList();
+              return Column(
+                children: [
+                  if (projectsN.isNotEmpty) ...[
+                    HorizntalListProjects(
+                      projects: projectsN,
+                      name: 'Не переведено',
+                    ),
+                  ],
+                  if (projectsI.isNotEmpty) ...[
+                    HorizntalListProjects(
+                      projects: projectsI,
+                      name: 'В процессе',
+                    ),
+                  ],
+                  if (projectsT.isNotEmpty) ...[
+                    HorizntalListProjects(
+                      projects: projectsT,
+                      name: 'Переведено',
+                    ),
+                  ]
+                ],
+              );
+            }
+            if (state is ProjectErrorState) {
+              return _errorState(state);
+            }
+            if (state is ProjectInitial) {
+              return const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Пока что здесь пусто!',
+                    style: TextStyle(fontSize: 45),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Создайте новый проект',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              );
+            }
+            return const SizedBox();
+          },
         ),
       ),
       floatingActionButton: _floatButton(context),
@@ -177,33 +196,4 @@ class HorizntalListProjects extends StatelessWidget {
       ),
     );
   }
-}
-
-Column _listEmptyState() {
-  return const Column(
-    mainAxisAlignment: MainAxisAlignment.end,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text(
-        'Пока что здесь пусто!',
-        style: TextStyle(fontSize: 45),
-        textAlign: TextAlign.center,
-      ),
-      SizedBox(height: 12),
-      Text(
-        'Создайте новый проект',
-        style: TextStyle(fontSize: 20),
-        textAlign: TextAlign.center,
-      ),
-    ],
-  );
-}
-
-SliverAppBar _appBar() {
-  return const SliverAppBar(
-    title: Text(
-      "Переводы",
-    ),
-    pinned: true,
-  );
 }
