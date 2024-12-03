@@ -4,26 +4,37 @@ class TranslateInputWidget extends StatefulWidget {
   Map<int, String> translatedSubtitles;
   final int index;
 
-  TranslateInputWidget(
-      {super.key, required this.index, required this.translatedSubtitles});
+  TranslateInputWidget({
+    super.key,
+    required this.index,
+    required this.translatedSubtitles,
+  });
 
   @override
   State<TranslateInputWidget> createState() => _TranslateInputWidgetState();
 }
 
 class _TranslateInputWidgetState extends State<TranslateInputWidget> {
-  TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(
+        text: widget.translatedSubtitles[widget.index] ?? "");
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.translatedSubtitles);
     return Expanded(
       child: SizedBox(
         height: 48,
         child: TextField(
           controller: controller,
           onChanged: (value) {
-            widget.translatedSubtitles[widget.index] = value;
+            setState(() {
+              widget.translatedSubtitles[widget.index] = value;
+            });
           },
           decoration: InputDecoration(
             fillColor: const Color(0xFFFFFFFF),

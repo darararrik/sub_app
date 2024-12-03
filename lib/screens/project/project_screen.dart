@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:subtitle/subtitle.dart';
@@ -24,6 +23,7 @@ class ProjectScreen extends StatefulWidget {
 
 class _ProjectScreenState extends State<ProjectScreen> {
   Map<int, String> translatedSubtitles = {};
+
   @override
   void initState() {
     super.initState();
@@ -35,20 +35,21 @@ class _ProjectScreenState extends State<ProjectScreen> {
     return BlocListener<SubtitlesBloc, SubtitlesState>(
       listener: (context, state) {
         if (state is SubtitlesLoaded) {
-          for (var entry in state.project.translatedWords.entries) {
-            int keyAsInt = int.parse(entry.key); // Безопасное преобразование
-            translatedSubtitles[keyAsInt] = entry.value;
-            print('Key as Int: $keyAsInt, Value: ${entry.value}');
-          }
+          // Переносим данные из проекта в локальную Map
+          translatedSubtitles = {
+            for (var entry in state.project.translatedWords.entries)
+              int.parse(entry.key): entry.value
+          };
         }
       },
-      child: PopScope(
-        onPopInvokedWithResult: (bool didPop, Object? result) async {
+      child: WillPopScope(
+        onWillPop: () async {
+          // Сохраняем прогресс при выходе
           context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
                 project: widget.project,
                 translatedData: translatedSubtitles,
               ));
-          return;
+          return true;
         },
         child: Scaffold(
           body: CustomScrollView(
@@ -61,6 +62,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ElevatedButton(
                         onPressed: () {
+                          // Сохранение через кнопку
                           context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
                                 project: widget.project,
                                 translatedData: translatedSubtitles,
