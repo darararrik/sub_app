@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 
-class TranslateInputWidget extends StatelessWidget {
+class TranslateInputWidget extends StatefulWidget {
+  final Map<int, String> translate;
+  final int index;
+
   const TranslateInputWidget({
     super.key,
+    required this.translate,
+    required this.index,
   });
+
+  @override
+  State<TranslateInputWidget> createState() => _TranslateInputWidgetState();
+}
+
+class _TranslateInputWidgetState extends State<TranslateInputWidget> {
+  late TextEditingController _controller;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,33 +29,35 @@ class TranslateInputWidget extends StatelessWidget {
       child: SizedBox(
         height: 48,
         child: TextField(
+          controller: _controller,
           onChanged: (value) {
-            //translation[index.toString()] = value;
+            widget.translate[widget.index] = value;
           },
           decoration: InputDecoration(
-              fillColor:  const Color.fromARGB(176, 246, 246, 246),
-              filled: true,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color.fromARGB(0, 110, 110, 110),
-                  width: 1, // Ширина границы
-                ),
+            fillColor: const Color(0xFFFFFFFF),
+            filled: true,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Color.fromARGB(0, 110, 110, 110),
+                width: 1,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color.fromARGB(
-                      0, 110, 110, 110), // Цвет границы в активном состоянии
-                  width: 1, // Ширина границы при фокусе
-                ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Color.fromARGB(0, 110, 110, 110),
+                width: 1,
               ),
-              hintText: "Введите перевод",
-              labelText: "Перевод",
-              labelStyle:
-                  const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-              hintStyle:
-                  const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+            ),
+            hintText: "Введите перевод",
+            labelText: "Перевод",
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
     );

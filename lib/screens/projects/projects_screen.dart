@@ -61,19 +61,21 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                           .toList();
                       return Column(
                         children: [
-                          HorizntalListProjects(
-                            projects: projectsN,
-                            name: 'Не переведено',
-                          ),
-                          if (projectsI.isNotEmpty) ...[
+                          if (projectsN.isNotEmpty) ...[
                             HorizntalListProjects(
                               projects: projectsN,
+                              name: 'Не переведено',
+                            ),
+                          ],
+                          if (projectsI.isNotEmpty) ...[
+                            HorizntalListProjects(
+                              projects: projectsI,
                               name: 'В процессе',
                             ),
                           ],
                           if (projectsT.isNotEmpty) ...[
                             HorizntalListProjects(
-                              projects: projectsN,
+                              projects: projectsT,
                               name: 'Переведено',
                             ),
                           ]

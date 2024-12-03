@@ -14,7 +14,7 @@ class SubtitleDataWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: const BoxDecoration(
-          color: Color.fromARGB(176, 246, 246, 246),
+          color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: Text(

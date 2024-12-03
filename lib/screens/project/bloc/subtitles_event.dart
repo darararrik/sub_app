@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'package:sub_app/repositories/model/project/project_model.dart';
 
 abstract class SubtitlesEvent extends Equatable {
@@ -25,4 +26,20 @@ class UpdateTranslation extends SubtitlesEvent {
   List<Object?> get props => [index, translation];
 }
 
-class SaveSubtitlesToFile extends SubtitlesEvent {}
+class SaveSubtitlesToFile extends SubtitlesEvent {
+  final Project project;
+  final Map<int, String> translate;
+  SaveSubtitlesToFile({
+    required this.project,
+    required this.translate,
+  });
+  @override
+  List<Object?> get props => [project, translate];
+}
+
+class Save extends SubtitlesEvent {
+  final Project project;
+  Save({
+    required this.project,
+  });
+}

@@ -5,6 +5,8 @@ abstract interface class IProjectRepo {
   void deleteProject(Project project);
   void deleteAllProjects();
   List<Project> getAllProjects();
-  void updateProject(Project project, {String? newName, String? newFilePath});
   Project? getProject(Project project);
+  // Новый метод для обновления переведённых субтитров и статуса
+  void updateTranslationProgress(
+      Project project, Map<String, String> translations, String status);
 }

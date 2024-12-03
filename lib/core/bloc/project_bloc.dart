@@ -22,7 +22,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       final imageBytes = event.imageFile.readAsBytesSync();
       final newProject = Project(
           ObjectId().toString(), event.name, event.engSubtitleFilePath,
-          translatedSubtitles: {}, syllables: {}, imageBytes: imageBytes);
+          syllables: {}, imageBytes: imageBytes);
       repo.createProject(newProject);
       emit(ProjectAddedState());
     } catch (e) {

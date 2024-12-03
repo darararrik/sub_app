@@ -36,38 +36,9 @@ class ProjectRepo implements IProjectRepo {
     return realm.find(project.id);
   }
 
-  /// Обновить проект
   @override
-  void updateProject(Project project, {String? newName, String? newFilePath}) {
-    realm.write(() {
-      if (newName != null) {
-        project.name = newName;
-      }
-      if (newFilePath != null) {
-        project.engSubtitleFilePath = newFilePath;
-      }
-    });
+  void updateTranslationProgress(
+      Project project, Map<String, String> translations, String status) {
+    // TODO: implement updateTranslationProgress
   }
 }
-    // Получаем директорию для сохранения файла
-    // final appDocDir = await getApplicationDocumentsDirectory();
-    // final newSubtitlePath = '${appDocDir.path}/subtitles/${newProject.id}.srt';
-
-    // // Создаём папку, если она ещё не существует
-    // final subtitleDir = Directory('${appDocDir.path}/subtitles');
-    // if (!await subtitleDir.exists()) {
-    //   await subtitleDir.create();
-    // }
-    // Копируем файл субтитров из оригинального местоположения в защищённую папку
-    // try {
-    //   final subtitleFile = File(newProject.engSubtitleFilePath!);
-    //   if (await subtitleFile.exists()) {
-    //     // Копирование файла
-    //     await subtitleFile.copy(newSubtitlePath);
-    //   }
-    // } on PlatformException catch (e) {
-    //   // Обработка ошибок
-    //   debugPrint("Ошибка при копировании файла: $e");
-    // }
-
-    // Сохраняем проект в Realm

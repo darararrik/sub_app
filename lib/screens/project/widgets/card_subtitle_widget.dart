@@ -10,9 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CardSubtitleWidget extends StatelessWidget {
   final int index;
   final String subtitleData;
+  final Map<int, String> translate;
 
   const CardSubtitleWidget(
-      {super.key, required this.index, required this.subtitleData});
+      {super.key,
+      required this.index,
+      required this.subtitleData,
+      required this.translate,});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,9 @@ class CardSubtitleWidget extends StatelessWidget {
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOut,
                 alignment: Alignment.center,
-                child: isExpanded ? _bodyCard() : const SizedBox.shrink(),
+                child: isExpanded
+                    ? _bodyCard(index, translate)
+                    : const SizedBox.shrink(),
               ),
             ],
           );
@@ -43,69 +49,63 @@ class CardSubtitleWidget extends StatelessWidget {
   }
 
   Widget _titleState(BuildContext context, bool isExpanded) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(0, 2),
-            blurRadius: 4,
-            spreadRadius: 0,
-            color: Color.fromRGBO(0, 0, 0, 0.06),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: TitleWidget(index: index),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(-4, 0),
-                  blurRadius: 4,
-                  spreadRadius: 0,
-                  color: Color.fromRGBO(0, 0, 0, 0.06),
+    return GestureDetector(
+      onTap: () => context.read<CardSubtitleCubit>().toggleExpansion(),
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 2),
+              blurRadius: 6,
+              spreadRadius: 0,
+              color: Color.fromRGBO(0, 0, 0, 0.08),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: TitleWidget(index: index),
+            ),
+            Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(-4, 0),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      color: Color.fromRGBO(0, 0, 0, 0.06),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: IconButton(
-              onPressed: () =>
-                  context.read<CardSubtitleCubit>().toggleExpansion(),
-              icon: Icon(
-                isExpanded
-                    ? Icons.arrow_drop_up_rounded
-                    : Icons.arrow_drop_down_rounded,
-              ),
-            ),
-          ),
-        ],
+                child: Icon(
+                  isExpanded
+                      ? Icons.arrow_drop_up_rounded
+                      : Icons.arrow_drop_down_rounded,
+                  size: 32,
+                )),
+          ],
+        ),
       ),
     );
   }
 
-  Padding _bodyCard() {
+  Padding _bodyCard(
+      int index, Map<int, String> translate) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          boxShadow: const [
-            BoxShadow(
-              offset: Offset(0, 4),
-              blurRadius: 4,
-              spreadRadius: 0,
-              color: Color.fromRGBO(0, 0, 0, 0.06),
-            ),
-          ],
-          color: Colors.white,
+          color: const Color(0xFFF4F4F4),
           borderRadius: BorderRadius.circular(24),
         ),
         child: Column(
@@ -121,11 +121,14 @@ class CardSubtitleWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            const Row(
+            Row(
               children: [
-                TranslateInputWidget(),
-                SizedBox(width: 12),
-                SyllableInputWidget(),
+                TranslateInputWidget(
+                    index: index,
+                    translate: translate,
+                   ),
+                const SizedBox(width: 12),
+                const SyllableInputWidget(),
               ],
             )
           ],

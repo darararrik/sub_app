@@ -9,12 +9,16 @@ abstract class SubtitlesState extends Equatable {
 class SubtitlesInitial extends SubtitlesState {}
 
 class SubtitlesLoaded extends SubtitlesState {
-  final List<Subtitle> subtitles;
-  final Map<String, String> translations;
-  SubtitlesLoaded(this.subtitles, this.translations);
+  final List<Subtitle> engSubtitles;
+  final List<Subtitle>? ruSubtitles;
+
+  SubtitlesLoaded(
+    this.engSubtitles,
+    this.ruSubtitles,
+  );
 
   @override
-  List<Object?> get props => [subtitles, translations];
+  List<Object?> get props => [engSubtitles, ruSubtitles];
 }
 
 class SubtitlesSaving extends SubtitlesState {}

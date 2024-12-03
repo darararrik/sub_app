@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
+    elevatedButtonTheme: const ElevatedButtonThemeData(
+        style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll<Color>(Color(0xFF3B3B3B)))),
+
+
+
+            
     scaffoldBackgroundColor: Colors.white,
+
+
+
+
     appBarTheme: const AppBarTheme(
         surfaceTintColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         color: Colors.white,
         titleTextStyle: TextStyle(
             fontWeight: FontWeight.w400, color: Colors.black, fontSize: 22)),
+
+
+
+
+
     colorScheme: const ColorScheme.light(
       primary: Color(
           0xFF3B3B3B), // Основной цвет (будет использован вместо accentColor)

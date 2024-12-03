@@ -17,23 +17,17 @@ class SyllableInputWidget extends StatelessWidget {
         keyboardType: TextInputType.number,
         maxLength: 2,
         decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
           contentPadding: EdgeInsets.zero,
           counterText: "",
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              //color: Colors.transparent,
-              color: Color.fromARGB(255, 141, 141, 141),
-              width: 1,
-            ),
+            borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              //color: Colors.transparent,
-              color: Color.fromARGB(255, 141, 141, 141),
-              width: 1,
-            ),
+            borderSide: BorderSide.none,
           ),
         ),
       ),
