@@ -37,8 +37,20 @@ class ProjectRepo implements IProjectRepo {
   }
 
   @override
-  void updateTranslationProgress(
-      Project project, Map<String, String> translations, String status) {
-    // TODO: implement updateTranslationProgress
+  Future<void> updateTranslationProgress(
+      Project project, Map<String, String> translations, String status) async {
+    try {
+      // Открытие транзакции Realm
+      realm.write(() {
+        // Обновляем переведенные данные и статус проекта
+        project.translatedWords.addAll(translations);
+        project.status = status;
+
+        // Обновляем проект в базе данных
+        realm.add(project, update: true);
+      });
+    } catch (e) {
+      rethrow;
+    }
   }
 }

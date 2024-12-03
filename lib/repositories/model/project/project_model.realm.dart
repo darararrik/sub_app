@@ -14,7 +14,7 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     String id,
     String name,
     String engSubtitleFilePath, {
-    String? ruSubtitleFilePath,
+    Map<String, String> translatedWords = const {},
     Map<String, String> syllables = const {},
     String status = "Не переведено",
     Iterable<int> imageBytes = const [],
@@ -27,7 +27,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'engSubtitleFilePath', engSubtitleFilePath);
-    RealmObjectBase.set(this, 'ruSubtitleFilePath', ruSubtitleFilePath);
+    RealmObjectBase.set<RealmMap<String>>(
+        this, 'translatedWords', RealmMap<String>(translatedWords));
     RealmObjectBase.set<RealmMap<String>>(
         this, 'syllables', RealmMap<String>(syllables));
     RealmObjectBase.set(this, 'status', status);
@@ -55,11 +56,11 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'engSubtitleFilePath', value);
 
   @override
-  String? get ruSubtitleFilePath =>
-      RealmObjectBase.get<String>(this, 'ruSubtitleFilePath') as String?;
+  RealmMap<String> get translatedWords =>
+      RealmObjectBase.get<String>(this, 'translatedWords') as RealmMap<String>;
   @override
-  set ruSubtitleFilePath(String? value) =>
-      RealmObjectBase.set(this, 'ruSubtitleFilePath', value);
+  set translatedWords(covariant RealmMap<String> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   RealmMap<String> get syllables =>
@@ -96,7 +97,7 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       'id': id.toEJson(),
       'name': name.toEJson(),
       'engSubtitleFilePath': engSubtitleFilePath.toEJson(),
-      'ruSubtitleFilePath': ruSubtitleFilePath.toEJson(),
+      'translatedWords': translatedWords.toEJson(),
       'syllables': syllables.toEJson(),
       'status': status.toEJson(),
       'imageBytes': imageBytes.toEJson(),
@@ -116,7 +117,7 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(id),
           fromEJson(name),
           fromEJson(engSubtitleFilePath),
-          ruSubtitleFilePath: fromEJson(ejson['ruSubtitleFilePath']),
+          translatedWords: fromEJson(ejson['translatedWords']),
           syllables: fromEJson(ejson['syllables'], defaultValue: const {}),
           status: fromEJson(ejson['status'], defaultValue: "Не переведено"),
           imageBytes: fromEJson(ejson['imageBytes']),
@@ -132,8 +133,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('id', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('engSubtitleFilePath', RealmPropertyType.string),
-      SchemaProperty('ruSubtitleFilePath', RealmPropertyType.string,
-          optional: true),
+      SchemaProperty('translatedWords', RealmPropertyType.string,
+          collectionType: RealmCollectionType.map),
       SchemaProperty('syllables', RealmPropertyType.string,
           collectionType: RealmCollectionType.map),
       SchemaProperty('status', RealmPropertyType.string),

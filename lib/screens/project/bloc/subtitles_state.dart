@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:subtitle/subtitle.dart';
 
 abstract class SubtitlesState extends Equatable {
@@ -10,15 +11,15 @@ class SubtitlesInitial extends SubtitlesState {}
 
 class SubtitlesLoaded extends SubtitlesState {
   final List<Subtitle> engSubtitles;
-  final List<Subtitle>? ruSubtitles;
+  final Project project;
 
   SubtitlesLoaded(
     this.engSubtitles,
-    this.ruSubtitles,
+    this.project,
   );
 
   @override
-  List<Object?> get props => [engSubtitles, ruSubtitles];
+  List<Object?> get props => [engSubtitles, project];
 }
 
 class SubtitlesSaving extends SubtitlesState {}

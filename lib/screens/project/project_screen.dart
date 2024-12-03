@@ -23,6 +23,7 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
+  Map<int, String> translatedSubtitles = {};
   @override
   void initState() {
     super.initState();
@@ -34,15 +35,19 @@ class _ProjectScreenState extends State<ProjectScreen> {
     return BlocListener<SubtitlesBloc, SubtitlesState>(
       listener: (context, state) {
         if (state is SubtitlesLoaded) {
-          final ru = state.ruSubtitles;
+          for (var entry in state.project.translatedWords.entries) {
+            int keyAsInt = int.parse(entry.key); // Безопасное преобразование
+            translatedSubtitles[keyAsInt] = entry.value;
+            print('Key as Int: $keyAsInt, Value: ${entry.value}');
+          }
         }
       },
       child: PopScope(
         onPopInvokedWithResult: (bool didPop, Object? result) async {
-          // context.read<SubtitlesBloc>().add(Save(
-          //       translate: widget.translatedSubtitles,
-          //       project: widget.project,
-          //     ));
+          context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
+                project: widget.project,
+                translatedData: translatedSubtitles,
+              ));
           return;
         },
         child: Scaffold(
@@ -56,8 +61,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ElevatedButton(
                         onPressed: () {
-                          context.read<SubtitlesBloc>().add(Save(
+                          context.read<SubtitlesBloc>().add(SaveSubtitlesToFile(
                                 project: widget.project,
+                                translatedData: translatedSubtitles,
                               ));
                         },
                         child: const Text(
@@ -75,17 +81,26 @@ class _ProjectScreenState extends State<ProjectScreen> {
               BlocBuilder<SubtitlesBloc, SubtitlesState>(
                 builder: (context, state) {
                   if (state is SubtitlesLoaded) {
-                    return _buildSubtitleList(
-                        state.engSubtitles, widget.project);
+                    return _buildSubtitleList(state.engSubtitles,
+                        translatedSubtitles, widget.project);
                   } else if (state is SubtitlesSaving) {
                     return const SliverToBoxAdapter(
-                        child: Center(child: CircularProgressIndicator()));
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   } else if (state is SubtitlesError) {
                     return SliverToBoxAdapter(
-                        child: Center(child: Text(state.message)));
+                      child: Center(
+                        child: Text(state.message),
+                      ),
+                    );
                   }
                   return const SliverToBoxAdapter(
-                      child: Center(child: Text("Неизвестное состояние")));
+                    child: Center(
+                      child: Text("Неизвестное состояние"),
+                    ),
+                  );
                 },
               ),
             ],
@@ -95,16 +110,17 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
-  Widget _buildSubtitleList(List<Subtitle> subtitles, Project project) {
+  Widget _buildSubtitleList(List<Subtitle> subtitles,
+      Map<int, String> translatedWords, Project project) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       sliver: SliverList.builder(
         itemCount: subtitles.length,
         itemBuilder: (context, index) {
-          return CardSubtgititleWidget(
+          return CardSubtitleWidget(
             index: index,
-            subtitleData: subtitles[index].data,
-            translate: translatedSubtitles,
+            subtitleWord: subtitles[index].data,
+            translatedSubtitles: translatedSubtitles,
           );
         },
       ),

@@ -26,7 +26,7 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
         Map<String, String> updatedTranslations = {};
 
         for (var subtitle in loadedState.engSubtitles) {
-          translation = event.translate[subtitle.index - 1] ?? "";
+          translation = event.translatedData[subtitle.index - 1] ?? "";
           updatedTranslations[subtitle.index.toString()] = translation;
 
           buffer.writeln(subtitle.index);
@@ -35,7 +35,7 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
           buffer.writeln();
         }
 
-        final directory = await getExternalStorageDirectory();
+        final directory = await getDownloadsDirectory();
         if (directory != null) {
           final file = File('${directory.path}/${project.name}.srt');
           await file.writeAsString(buffer.toString(), mode: FileMode.write);
@@ -56,33 +56,18 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
   // Загрузка субтитров (английских и русских)
   FutureOr<void> _loadSubtitles(LoadSubtitles event, emit) async {
     try {
-
       final engSubtitlesPath = event.project.engSubtitleFilePath;
       final directory = await getExternalStorageDirectory();
       if (directory == null) {
         emit(SubtitlesError('Не удалось получить директорию для субтитров'));
         return;
       }
-
-      // Путь к русским субтитрам
-      final ruSubtitlesPath = '${directory.path}/${event.project.name}.srt';
-
-      // Чтение английских субтитров
       final engFile = File(engSubtitlesPath);
       if (!await engFile.exists()) {
         emit(SubtitlesError('Не удалось найти английские субтитры'));
         return;
       }
-
       final engSubtitlesData = await engFile.readAsString();
-
-      // Чтение русских субтитров (если они есть)
-      String ruSubtitlesData = '';
-      final ruFile = File(ruSubtitlesPath);
-      if (await ruFile.exists()) {
-        ruSubtitlesData = await ruFile.readAsString();
-      }
-
       // Создание контроллеров для субтитров
       var controller = SubtitleController(
         provider: SubtitleProvider.fromString(
@@ -90,20 +75,8 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
           type: SubtitleType.srt,
         ),
       );
-
-      var ruController = SubtitleController(
-        provider: SubtitleProvider.fromString(
-          data: ruSubtitlesData,
-          type: SubtitleType.srt,
-        ),
-      );
-
-      // Инициализация контроллеров
       await controller.initial();
-      await ruController.initial();
-
-      // Эмитируем состояние с загруженными субтитрами
-      emit(SubtitlesLoaded(controller.subtitles, ruController.subtitles));
+      emit(SubtitlesLoaded(controller.subtitles, event.project));
     } catch (e) {
       emit(SubtitlesError('Ошибка при загрузке субтитров: $e'));
     }

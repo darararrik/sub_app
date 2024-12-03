@@ -8,7 +8,7 @@ class _Project {
   late String id;
   late String name; // Название проекта
   late String engSubtitleFilePath; // Путь к файлу субтитров
-  late String? ruSubtitleFilePath; // Путь к файлу субтитров
+  late Map<String, String> translatedWords; // Путь к файлу субтитров
   late Map<String, String> syllables = {};
 
   late String status = "Не переведено";

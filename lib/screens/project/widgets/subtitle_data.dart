@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class SubtitleDataWidget extends StatelessWidget {
   const SubtitleDataWidget({
     super.key,
-    required this.subtitleData,
+    required this.subtitleWord,
   });
 
-  final String subtitleData;
+  final String subtitleWord;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class SubtitleDataWidget extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: Text(
-          subtitleData,
+          subtitleWord,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
         ),
       ),

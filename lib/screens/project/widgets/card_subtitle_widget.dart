@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:sub_app/screens/project/cubit/card_subtitle_cubit.dart';
 import 'package:sub_app/screens/project/widgets/subtitle_data.dart';
 import 'package:sub_app/screens/project/widgets/syllable_input_widget.dart';
 import 'package:sub_app/screens/project/widgets/title_widget.dart';
 import 'package:sub_app/screens/project/widgets/translate_input_widget.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 class CardSubtitleWidget extends StatelessWidget {
   final int index;
-  final String subtitleData;
-  final Map<int, String> translate;
+  final String subtitleWord;
+  Map<int, String> translatedSubtitles;
 
-  const CardSubtitleWidget(
-      {super.key,
-      required this.index,
-      required this.subtitleData,
-      required this.translate,});
+  CardSubtitleWidget({
+    super.key,
+    required this.index,
+    required this.subtitleWord,
+    required this.translatedSubtitles,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,7 @@ class CardSubtitleWidget extends StatelessWidget {
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOut,
                 alignment: Alignment.center,
-                child: isExpanded
-                    ? _bodyCard(index, translate)
-                    : const SizedBox.shrink(),
+                child: isExpanded ? _bodyCard() : const SizedBox.shrink(),
               ),
             ],
           );
@@ -98,8 +97,7 @@ class CardSubtitleWidget extends StatelessWidget {
     );
   }
 
-  Padding _bodyCard(
-      int index, Map<int, String> translate) {
+  Padding _bodyCard() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24),
       child: Container(
@@ -115,7 +113,7 @@ class CardSubtitleWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SubtitleDataWidget(subtitleData: subtitleData),
+                SubtitleDataWidget(subtitleWord: subtitleWord),
                 const SizedBox(width: 12),
                 const SyllableInputWidget(),
               ],
@@ -124,9 +122,9 @@ class CardSubtitleWidget extends StatelessWidget {
             Row(
               children: [
                 TranslateInputWidget(
-                    index: index,
-                    translate: translate,
-                   ),
+                  index: index,
+                  translatedSubtitles: translatedSubtitles,
+                ),
                 const SizedBox(width: 12),
                 const SyllableInputWidget(),
               ],

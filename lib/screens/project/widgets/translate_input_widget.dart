@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
 
 class TranslateInputWidget extends StatefulWidget {
-  final Map<int, String> translate;
+  Map<int, String> translatedSubtitles;
   final int index;
 
-  const TranslateInputWidget({
-    super.key,
-    required this.translate,
-    required this.index,
-  });
+  TranslateInputWidget(
+      {super.key, required this.index, required this.translatedSubtitles});
 
   @override
   State<TranslateInputWidget> createState() => _TranslateInputWidgetState();
 }
 
 class _TranslateInputWidgetState extends State<TranslateInputWidget> {
-  late TextEditingController _controller;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    print(widget.translatedSubtitles);
     return Expanded(
       child: SizedBox(
         height: 48,
         child: TextField(
-          controller: _controller,
+          controller: controller,
           onChanged: (value) {
-            widget.translate[widget.index] = value;
+            widget.translatedSubtitles[widget.index] = value;
           },
           decoration: InputDecoration(
             fillColor: const Color(0xFFFFFFFF),
