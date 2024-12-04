@@ -7,11 +7,10 @@ import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
 import 'package:sub_app/core/theme.dart';
 import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
-import 'package:sub_app/core/widgets/tex_field_widget.dart';
+import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/new_project/widgets/pick_image_card.dart';
 import 'package:sub_app/core/status.dart';
-import 'package:sub_app/screens/projects/widgets/horizntal_list_projects.dart';
 
 class NewProjectScreen extends StatefulWidget {
   const NewProjectScreen({super.key});
@@ -84,6 +83,8 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                                 SizedBox(
                                     height: 48,
                                     child: TextFieldWidget(
+                                      obscureText: false,
+                                      label: "Название проекта",
                                       controller: nameController,
                                     )),
                                 const SizedBox(
@@ -135,11 +136,11 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                               fontSize: 24, fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
                                   "Файл субтитров ",
@@ -147,63 +148,61 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500),
                                 ),
-                                if (engFilePath.isNotEmpty) ...[
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    child: Text(
-                                      engFilePath.split('/').last,
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                          overflow: TextOverflow.fade),
+                                IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  tooltip: "Выбрать субтитры",
+                                  icon: Container(
+                                    decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    child: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.file_upload_outlined,
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          "Загрузить файл",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                ]
+                                  onPressed: () async {
+                                    final result =
+                                        await FilePicker.platform.pickFiles();
+                                    if (result != null &&
+                                        result.files.isNotEmpty) {
+                                      engFilePath = result.files.single.path!;
+                                      context
+                                          .read<SubPickCubit>()
+                                          .loadSubtitles(engFilePath);
+                                      setState(() {});
+                                    }
+                                  },
+                                ),
                               ],
                             ),
-                            IconButton(
-                              padding: const EdgeInsets.all(0),
-                              tooltip: "Выбрать субтитры",
-                              icon: Container(
-                                decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                child: const Row(
-                                  children: [
-                                    Icon(
-                                      Icons.file_upload_outlined,
-                                      color: Colors.white,
-                                      size: 24,
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      "Загрузить файл",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500),
-                                    )
-                                  ],
-                                ),
+                            if (engFilePath.isNotEmpty) ...[
+                              const SizedBox(
+                                height: 4,
                               ),
-                              onPressed: () async {
-                                final result =
-                                    await FilePicker.platform.pickFiles();
-                                if (result != null && result.files.isNotEmpty) {
-                                  engFilePath = result.files.single.path!;
-                                  context
-                                      .read<SubPickCubit>()
-                                      .loadSubtitles(engFilePath);
-                                  setState(() {});
-                                }
-                              },
-                            ),
+                              Text(
+                                engFilePath.split('/').last,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    overflow: TextOverflow.fade),
+                              ),
+                            ]
                           ],
                         ),
                         const SizedBox(
