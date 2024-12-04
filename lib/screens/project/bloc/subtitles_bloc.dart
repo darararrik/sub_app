@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo_interface.dart';
 import 'package:subtitle/subtitle.dart';
-import 'subtitles_event.dart';
-import 'subtitles_state.dart';
+part 'subtitles_event.dart';
+part 'subtitles_state.dart';
 
 class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
   final IProjectRepo repo;
 
   SubtitlesBloc(this.repo) : super(SubtitlesInitial()) {
     on<SaveSubtitlesToFile>(_fileSave);
-    on<LoadSubtitles>(_loadSubtitles);
     on<Save>(_localeSave);
+    on<LoadSubtitles>(_loadSubtitles);
   }
 
   // Сохранение переведённых субтитров
@@ -88,12 +90,12 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
         buffer.writeln(translation.isNotEmpty ? translation : subtitle.data);
         buffer.writeln();
       }
-
       final directory = await getDownloadsDirectory();
       if (directory != null) {
         final file = File('${directory.path}/${event.project.name}.srt');
         await file.writeAsString(buffer.toString(), mode: FileMode.write);
       }
+      emit(SubtitlesSaved());
     } catch (e) {
       emit(SubtitlesError('Ошибка при сохранении файла: $e'));
     }

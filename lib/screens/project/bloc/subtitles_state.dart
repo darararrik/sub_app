@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:sub_app/repositories/model/project/project_model.dart';
-import 'package:subtitle/subtitle.dart';
+part of 'subtitles_bloc.dart';
 
 abstract class SubtitlesState extends Equatable {
   @override
@@ -11,7 +9,7 @@ class SubtitlesInitial extends SubtitlesState {}
 
 class SubtitlesLoaded extends SubtitlesState {
   final List<Subtitle> engSubtitles;
-  final Map<int,String> translatedWords;
+  final Map<int, String> translatedWords;
 
   SubtitlesLoaded(
     this.engSubtitles,
@@ -24,8 +22,6 @@ class SubtitlesLoaded extends SubtitlesState {
 
 class Loading extends SubtitlesState {}
 
-class SubtitlesSaved extends SubtitlesState {}
-
 class SubtitlesError extends SubtitlesState {
   final String message;
 
@@ -35,3 +31,4 @@ class SubtitlesError extends SubtitlesState {
   List<Object?> get props => [message];
 }
 
+class SubtitlesSaved extends SubtitlesState {}

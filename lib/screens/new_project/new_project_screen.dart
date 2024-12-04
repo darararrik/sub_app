@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
+import 'package:sub_app/core/theme.dart';
 import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
 import 'package:sub_app/core/widgets/tex_field_widget.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/new_project/widgets/pick_image_card.dart';
+import 'package:sub_app/core/status.dart';
+import 'package:sub_app/screens/projects/widgets/horizntal_list_projects.dart';
 
 class NewProjectScreen extends StatefulWidget {
   const NewProjectScreen({super.key});
@@ -78,7 +81,11 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                             Expanded(
                                 child: Column(
                               children: [
-                                TextFieldWidget(controller: nameController),
+                                SizedBox(
+                                    height: 48,
+                                    child: TextFieldWidget(
+                                      controller: nameController,
+                                    )),
                                 const SizedBox(
                                   height: 12,
                                 ),
@@ -99,9 +106,9 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                                     DropdownButton<String>(
                                       value: selectedStatus,
                                       items: <String>[
-                                        'Не переведено',
-                                        'В процессе',
-                                        'Переведено'
+                                        Status.notTranslated.displayName,
+                                        Status.inProgress.displayName,
+                                        Status.completed.displayName,
                                       ].map<DropdownMenuItem<String>>(
                                           (String value) {
                                         return DropdownMenuItem<String>(
@@ -158,10 +165,32 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                               ],
                             ),
                             IconButton(
+                              padding: const EdgeInsets.all(0),
                               tooltip: "Выбрать субтитры",
-                              icon: const Icon(
-                                Icons.upload_rounded,
-                                size: 32,
+                              icon: Container(
+                                decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(8)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                child: const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.file_upload_outlined,
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      "Загрузить файл",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ],
+                                ),
                               ),
                               onPressed: () async {
                                 final result =

@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:sub_app/repositories/model/project/project_model.dart';
+part of 'subtitles_bloc.dart';
 
 abstract class SubtitlesEvent extends Equatable {
   @override
@@ -47,3 +45,5 @@ class Save extends SubtitlesEvent {
   @override
   List<Object?> get props => [project, translatedData];
 }
+
+

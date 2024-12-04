@@ -12,7 +12,10 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      cursorColor: Colors.black,
+      textAlign: TextAlign.start, // Горизонтальное выравнивание
       decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 12),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
             borderSide: BorderSide(

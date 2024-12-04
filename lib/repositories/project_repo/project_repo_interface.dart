@@ -9,4 +9,5 @@ abstract interface class IProjectRepo {
   // Новый метод для обновления переведённых субтитров и статуса
   void updateTranslationProgress(
       Project project, Map<String, String> translations, String status);
+  void updateProgressStatus(Project project, String status);
 }

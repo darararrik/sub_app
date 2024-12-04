@@ -53,4 +53,16 @@ class ProjectRepo implements IProjectRepo {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateProgressStatus(Project project, String status) async {
+    try {
+      realm.write(() {
+        project.status = status;
+        realm.add(project, update: true);
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

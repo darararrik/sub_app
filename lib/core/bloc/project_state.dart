@@ -13,7 +13,6 @@ class ProjectAddedState extends ProjectState {
   List<Object?> get props => [];
 }
 
-
 // Состояние ошибки
 class ProjectErrorState extends ProjectState {
   final String errorMessage;
@@ -37,4 +36,20 @@ class ProjectsLoadedState extends ProjectState {
 class ProjectLoadingState extends ProjectState {
   @override
   List<Object?> get props => [];
+}
+
+class ProjectSaved extends ProjectState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateProgressStatus extends ProjectEvent {
+  final Project project;
+  final String status;
+  UpdateProgressStatus({
+    required this.status,
+    required this.project,
+  });
+  @override
+  List<Object?> get props => [project];
 }

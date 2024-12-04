@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
-import 'package:sub_app/core/image.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo_interface.dart';
 
@@ -18,6 +15,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   ProjectBloc(this.repo) : super(ProjectInitial()) {
     on<CreateProjectEvent>(_onCreateProject);
     on<GetAllProjectsEvent>(_onGetAllProjects);
+    on<UpdateProgressStatus>(_updateStatus);
   }
   // Логика добавления проекта
   Future<void> _onCreateProject(
@@ -57,7 +55,25 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     } catch (e) {
       emit(ProjectErrorState(errorMessage: 'Ошибка загрузки проектов: $e'));
     } finally {
-      event.completer?.isCompleted;
+      event.completer?.complete();
+    }
+  }
+
+  FutureOr<void> _updateStatus(
+      UpdateProgressStatus event, Emitter<ProjectState> emit) {
+    try {
+      if (state is! ProjectLoadingState) {
+        emit(ProjectLoadingState());
+      }
+      repo.updateProgressStatus(event.project, event.status);
+      final projects = repo.getAllProjects();
+      if (projects.isEmpty) {
+        emit(ProjectInitial());
+      } else {
+        emit(ProjectsLoadedState(projects: projects));
+      }
+    } catch (e) {
+      emit(ProjectErrorState(errorMessage: 'Ошибка при сохранении файла: $e'));
     }
   }
 }

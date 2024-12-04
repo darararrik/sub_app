@@ -1,14 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
-import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
-import 'package:sub_app/core/widgets/card_widget.dart';
-import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/new_project/new_project_screen.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
-import 'package:sub_app/screens/project/bloc/subtitles_event.dart';
+import 'package:sub_app/core/status.dart';
+import 'package:sub_app/screens/projects/widgets/horizntal_list_projects.dart';
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});
@@ -49,71 +46,84 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
           context
               .read<ProjectBloc>()
               .add(GetAllProjectsEvent(completer: completer));
-          completer.future;
+          return completer.future;
         },
-        child: BlocBuilder<ProjectBloc, ProjectState>(
-          builder: (context, state) {
-            if (state is ProjectLoadingState) {
-              return _loadingState();
-            }
-            if (state is ProjectsLoadedState) {
-              final projects = state.projects;
-              final projectsN = projects
-                  .where((project) => project.status == "Не переведено")
-                  .toList();
-              final projectsI = projects
-                  .where((project) => project.status == "В процессе")
-                  .toList();
-              final projectsT = projects
-                  .where((project) => project.status == "Переведено")
-                  .toList();
-              return Column(
-                children: [
-                  if (projectsN.isNotEmpty) ...[
-                    HorizntalListProjects(
-                      projects: projectsN,
-                      name: 'Не переведено',
-                    ),
-                  ],
-                  if (projectsI.isNotEmpty) ...[
-                    HorizntalListProjects(
-                      projects: projectsI,
-                      name: 'В процессе',
-                    ),
-                  ],
-                  if (projectsT.isNotEmpty) ...[
-                    HorizntalListProjects(
-                      projects: projectsT,
-                      name: 'Переведено',
-                    ),
-                  ]
-                ],
-              );
-            }
-            if (state is ProjectErrorState) {
-              return _errorState(state);
-            }
-            if (state is ProjectInitial) {
-              return const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Пока что здесь пусто!',
-                    style: TextStyle(fontSize: 45),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    'Создайте новый проект',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              );
-            }
-            return const SizedBox();
-          },
+        child: ListView(
+          children: [
+            BlocListener<SubtitlesBloc, SubtitlesState>(
+              listener: (context, state) {
+                if (state is SubtitlesSaved) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Проект сохранен")),
+                  );
+                }
+              },
+              child: BlocBuilder<ProjectBloc, ProjectState>(
+                builder: (context, state) {
+                  if (state is ProjectLoadingState) {
+                    return _loadingState();
+                  }
+                  if (state is ProjectsLoadedState) {
+                    final projects = state.projects;
+                    final projectsN = projects
+                        .where((project) => project.status == "Не переведено")
+                        .toList();
+                    final projectsI = projects
+                        .where((project) => project.status == "В процессе")
+                        .toList();
+                    final projectsT = projects
+                        .where((project) => project.status == "Завершено")
+                        .toList();
+                    return Column(
+                      children: [
+                        if (projectsN.isNotEmpty) ...[
+                          HorizntalListProjects(
+                            projects: projectsN,
+                            name: Status.notTranslated.displayName,
+                          ),
+                        ],
+                        if (projectsI.isNotEmpty) ...[
+                          HorizntalListProjects(
+                            projects: projectsI,
+                            name: Status.inProgress.displayName,
+                          ),
+                        ],
+                        if (projectsT.isNotEmpty) ...[
+                          HorizntalListProjects(
+                            projects: projectsT,
+                            name: Status.completed.displayName,
+                          ),
+                        ]
+                      ],
+                    );
+                  }
+                  if (state is ProjectErrorState) {
+                    return _errorState(state);
+                  }
+                  if (state is ProjectInitial) {
+                    return const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Пока что здесь пусто!',
+                          style: TextStyle(fontSize: 45),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Создайте новый проект',
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: _floatButton(context),
@@ -154,70 +164,6 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
             Text("Новый перевод")
           ],
         ),
-      ),
-    );
-  }
-}
-
-class HorizntalListProjects extends StatelessWidget {
-  const HorizntalListProjects({
-    super.key,
-    required this.projects,
-    required this.name,
-  });
-  final String name;
-  final List<Project> projects;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54),
-          ),
-          SizedBox(
-            height: 240,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 4),
-              scrollDirection: Axis.horizontal,
-              itemCount: projects.length,
-              itemBuilder: (context, index) {
-                final project = projects[index];
-                return GestureDetector(
-                    onLongPress: () {
-                      showMenu(
-                        context: context,
-                        position: const RelativeRect.fromLTRB(
-                            100, 100, 100, 100), // Adjust position as needed
-                        items: [
-                          PopupMenuItem<String>(
-                            value: 'Option1',
-                            onTap: () {
-                              context
-                                  .read<SubtitlesBloc>()
-                                  .add(SaveSubtitlesToFile(project: project));
-                            },
-                            child: const Text('Импортировать'),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Option2',
-                            child: Text('Изменить прогресс'),
-                          ),
-                        ],
-                      );
-                    },
-                    child: CardWidget(project: project));
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

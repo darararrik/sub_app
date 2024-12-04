@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:subtitle/subtitle.dart';
-
-import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
-import 'package:sub_app/screens/project/bloc/subtitles_event.dart';
-import 'package:sub_app/screens/project/bloc/subtitles_state.dart';
+
 import 'package:sub_app/screens/project/widgets/card_subtitle_widget.dart';
 
 class ProjectScreen extends StatefulWidget {
