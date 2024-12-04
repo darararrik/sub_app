@@ -17,7 +17,7 @@ class DeleteAccountScreen extends StatelessWidget {
           if (state is AuthSuccessMessage) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(state.message ?? 'Аккаунт удален успешно')),
+                  content: Text(state.message)),
             );
             Navigator.pop(context); // Закрытие экрана после успешного удаления
           } else if (state is AuthErrorState) {
