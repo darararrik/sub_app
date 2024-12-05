@@ -81,7 +81,7 @@ class AuthRepository implements IAuthRepository {
             .set({'email': email}, SetOptions(merge: true));
       }
     } catch (e) {
-      rethrow;
+      _handleAuthError(e);
     }
   }
 

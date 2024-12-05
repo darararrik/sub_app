@@ -29,9 +29,34 @@ class TextFieldWidget extends StatelessWidget {
                 width: 1,
                 color: Colors.grey), // Цвет полоски при фокусе (не изменяется)
           ),
+          errorStyle: TextStyle(
+            color: Theme.of(context).colorScheme.error,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.error,
+              width: 1,
+            ),
+          ),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
             borderSide: BorderSide(
+              width: 1,
+            ), // Цвет полоски при фокусе (не изменяется)
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(
+              width: 1,
+            ), // Цвет полоски при фокусе (не изменяется)
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.error,
               width: 1,
             ), // Цвет полоски при фокусе (не изменяется)
           ),

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
+import 'package:flutter/material.dart';
 
 class DeleteAccountScreen extends StatelessWidget {
   DeleteAccountScreen({super.key});
@@ -16,8 +16,7 @@ class DeleteAccountScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthSuccessMessage) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(state.message)),
+              SnackBar(content: Text(state.message)),
             );
             Navigator.pop(context); // Закрытие экрана после успешного удаления
           } else if (state is AuthErrorState) {
@@ -61,11 +60,7 @@ class DeleteAccountScreen extends StatelessWidget {
                             );
                             return;
                           }
-                          context.read<AuthBloc>().add(
-                                DeleteAccountRequested(
-                                  currentPassword: password,
-                                ),
-                              );
+                          _showConfirmationDialog(context, password);
                         },
                         color: Theme.of(context).colorScheme.error,
                       ),
@@ -76,6 +71,39 @@ class DeleteAccountScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context, String password) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Подтверждение удаления'),
+          content: const Text(
+              'Вы уверены, что хотите удалить аккаунт? Это действие необратимо.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Закрыть диалог
+              },
+              child: const Text('Отмена'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Закрыть диалог
+                context.read<AuthBloc>().add(
+                      DeleteAccountRequested(currentPassword: password),
+                    );
+              },
+              child: const Text(
+                'Удалить',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

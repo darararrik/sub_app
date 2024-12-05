@@ -43,8 +43,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Unauthenticated());
     } on FirebaseAuthException catch (e) {
       emit(AuthErrorState(error: e.message));
+      emit(Unauthenticated());
     } catch (e) {
       emit(const AuthErrorState(error: 'Не удалось удалить аккаунт.'));
+      emit(Unauthenticated());
     }
   }
 
@@ -68,34 +70,60 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onSignInRequested(
       SignInRequested event, Emitter<AuthState> emit) async {
     try {
-      emit(AuthLoading());
+      emit(AuthLoading()); // Показываем индикатор загрузки
       final user = await _authRepository.signInWithEmailAndPassword(
-          email: event.email, password: event.password);
-      emit(AuthSuccess(user!));
+        email: event.email,
+        password: event.password,
+      );
+      // Если аутентификация успешна
+      if (user == null) {
+        emit(const AuthErrorState(error: 'Произошла ошибка.'));
+      } else {
+        emit(AuthSuccess(user)); // Успех, если пользователь авторизован
+      }
     } on FirebaseAuthException catch (e) {
+      // Обработка ошибок Firebase
       emit(AuthErrorState(error: e.message));
     } catch (e) {
-      emit(const AuthErrorState(error: "Произошла ошибка"));
+      // Обработка других ошибок
+      emit(const AuthErrorState(error: 'Произошла ошибка'));
+    } finally {
+      // Закрытие состояния загрузки, если оно еще не закрыто
+      // Мы гарантируем, что загрузка будет завершена в любом случае.
+      // Это гарантирует, что даже если ошибка произошла, состояние загрузки завершится.
+      if (!(state is AuthSuccess || state is AuthErrorState)) {
+        emit(Unauthenticated()); // Выводим неавторизованный статус
+      }
     }
   }
 
   Future<void> _onSignUpRequested(
       SignUpRequested event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
     try {
+      emit(AuthLoading());
+
       final user = await _authRepository.createUser(
         email: event.email,
         password: event.password,
       );
       if (user == null) {
         emit(const AuthErrorState(error: 'Произошла ошибка.'));
-      } else {}
-      await _authRepository.saveUserDataToFirestore(email: event.email);
-      emit(AuthSuccess(user!));
+        emit(Unauthenticated());
+      } else {
+        await _authRepository.saveUserDataToFirestore(email: event.email);
+        emit(AuthSuccess(user));
+      }
     } on FirebaseAuthException catch (e) {
       emit(AuthErrorState(error: e.message));
     } catch (e) {
       emit(const AuthErrorState(error: 'Произошла ошибка.'));
+    } finally {
+      // Закрытие состояния загрузки, если оно еще не закрыто
+      // Мы гарантируем, что загрузка будет завершена в любом случае.
+      // Это гарантирует, что даже если ошибка произошла, состояние загрузки завершится.
+      if (!(state is AuthSuccess || state is AuthErrorState)) {
+        emit(Unauthenticated()); // Выводим неавторизованный статус
+      }
     }
   }
 }
