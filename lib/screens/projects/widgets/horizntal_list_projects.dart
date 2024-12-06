@@ -56,7 +56,7 @@ class HorizntalListProjects extends StatelessWidget {
                                 .read<SubtitlesBloc>()
                                 .add(SaveSubtitlesToFile(project: project));
                           },
-                          child: const Text('Импортировать'),
+                          child: const Text('Экспортировать'),
                         ),
                         PopupMenuItem<String>(
                           child: const Text('Изменить прогресс'),

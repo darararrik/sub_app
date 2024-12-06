@@ -25,7 +25,7 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const NewProjectScreen(),
         ),
         GoRoute(
-          path: 'project/:id',
+          path: ':id',
           builder: (context, state) {
             // Получаем данные из extra
             final Project project = state.extra as Project;
