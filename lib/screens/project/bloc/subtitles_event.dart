@@ -6,12 +6,12 @@ abstract class SubtitlesEvent extends Equatable {
 }
 
 class LoadSubtitles extends SubtitlesEvent {
-  final Project project;
-  
-  LoadSubtitles(this.project);
+  final String projectId;
+
+  LoadSubtitles(this.projectId);
 
   @override
-  List<Object?> get props => [project];
+  List<Object?> get props => [projectId];
 }
 
 class UpdateTranslation extends SubtitlesEvent {
@@ -45,4 +45,3 @@ class Save extends SubtitlesEvent {
   @override
   List<Object?> get props => [project, translatedData];
 }
-

@@ -5,11 +5,21 @@ import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 
-class DeleteAccountScreen extends StatelessWidget {
-  DeleteAccountScreen({super.key});
+class DeleteAccountScreen extends StatefulWidget {
+  const DeleteAccountScreen({super.key});
 
-  final TextEditingController controller = TextEditingController();
+  @override
+  State<DeleteAccountScreen> createState() => _DeleteAccountScreenState();
+}
+
+class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  final TextEditingController controllerPassword = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    controllerPassword.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +64,7 @@ class DeleteAccountScreen extends StatelessWidget {
                       // Поле ввода пароля
                       TextFieldWidget(
                         obscureText: true,
-                        controller: controller,
+                        controller: controllerPassword,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Введите пароль';
@@ -77,7 +87,7 @@ class DeleteAccountScreen extends StatelessWidget {
                           text: "Удалить аккаунт",
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              final password = controller.text.trim();
+                              final password = controllerPassword.text.trim();
                               _showConfirmationDialog(context, password);
                             }
                           },

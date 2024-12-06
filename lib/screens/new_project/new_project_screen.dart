@@ -29,8 +29,12 @@ class NewProjectScreenState extends State<NewProjectScreen> {
     context.read<PickImageCubit>().resetState();
   }
 
-  // Получаем экземпляр SubPickCubit через GetIt
-//final SubPickCubit subPickCubit = GetIt.instance<SubPickCubit>();
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

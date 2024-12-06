@@ -32,8 +32,8 @@ class ProjectRepo implements IProjectRepo {
   }
 
   @override
-  Project? getProject(Project project) {
-    return realm.find(project.id);
+  Project? getProject(String projectId) {
+    return realm.find(projectId);
   }
 
   @override

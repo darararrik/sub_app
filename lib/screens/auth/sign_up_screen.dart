@@ -6,46 +6,24 @@ import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController1 = TextEditingController();
-
   final TextEditingController passwordController2 = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Введите электронную почту';
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Некорректный формат электронной почты';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Введите пароль';
-    }
-    if (value.length < 6) {
-      return 'Пароль должен содержать не менее 6 символов';
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Повторите пароль';
-    }
-    if (value != passwordController1.text) {
-      return 'Пароли не совпадают';
-    }
-    return null;
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController1.dispose();
+    passwordController2.dispose();
+    super.dispose();
   }
 
   @override
@@ -172,5 +150,36 @@ class SignUpScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Введите электронную почту';
+    }
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Некорректный формат электронной почты';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Введите пароль';
+    }
+    if (value.length < 6) {
+      return 'Пароль должен содержать не менее 6 символов';
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Повторите пароль';
+    }
+    if (value != passwordController1.text) {
+      return 'Пароли не совпадают';
+    }
+    return null;
   }
 }

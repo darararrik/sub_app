@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/auth/sign_in_screen.dart';
 import 'package:sub_app/screens/auth/sign_up_screen.dart';
 import 'package:sub_app/screens/change_password_screen/change_password_screen.dart';
@@ -25,13 +24,20 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const NewProjectScreen(),
         ),
         GoRoute(
-          path: ':id',
+          path: 'project',
           builder: (context, state) {
-            // Получаем данные из extra
-            final Project project = state.extra as Project;
-
-            return ProjectScreen(project: project);
+            // Проверяем, что extra не null и правильного типа
+            final id = state.extra as String;
+            return ProjectScreen(projectId: id);
           },
+        ),
+        GoRoute(
+          path: 'signin',
+          builder: (context, state) => const SignInScreen(),
+        ),
+        GoRoute(
+          path: 'signup',
+          builder: (context, state) => SignUpScreen(),
         ),
         GoRoute(
           path: 'profile',
@@ -47,14 +53,6 @@ final GoRouter appRouter = GoRouter(
               builder: (context, state) => ChangePasswordScreen(),
             ),
           ],
-        ),
-        GoRoute(
-          path: 'signin',
-          builder: (context, state) => const SignInScreen(),
-        ),
-        GoRoute(
-          path: 'signup',
-          builder: (context, state) => SignUpScreen(),
         ),
       ],
     ),

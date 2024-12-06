@@ -39,32 +39,35 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
   FutureOr<void> _loadSubtitles(LoadSubtitles event, emit) async {
     try {
       emit(Loading());
-      final engSubtitlesPath = event.project.engSubtitleFilePath;
-      final directory = await getExternalStorageDirectory();
-      if (directory == null) {
-        emit(SubtitlesError('Не удалось получить директорию для субтитров'));
-        return;
+      final project = repo.getProject(event.projectId);
+      if (project == null) {
+        emit(SubtitlesError('Не удалось найти проект субтитры'));
+      } else {
+        final engSubtitlesPath = project.engSubtitleFilePath;
+        final directory = await getExternalStorageDirectory();
+        if (directory == null) {
+          emit(SubtitlesError('Не удалось получить директорию для субтитров'));
+          return;
+        }
+        final engFile = File(engSubtitlesPath);
+        if (!await engFile.exists()) {
+          emit(SubtitlesError('Не удалось найти английские субтитры'));
+          return;
+        }
+        final engSubtitlesData = await engFile.readAsString();
+        var controller = SubtitleController(
+          provider: SubtitleProvider.fromString(
+            data: engSubtitlesData,
+            type: SubtitleType.srt,
+          ),
+        );
+        await controller.initial();
+        final translatedWord = {
+          for (var entry in project.translatedWords.entries)
+            int.parse(entry.key): entry.value
+        };
+        emit(SubtitlesLoaded(controller.subtitles, translatedWord, project));
       }
-      final engFile = File(engSubtitlesPath);
-      if (!await engFile.exists()) {
-        emit(SubtitlesError('Не удалось найти английские субтитры'));
-        return;
-      }
-      final engSubtitlesData = await engFile.readAsString();
-      // Создание контроллеров для субтитров
-      var controller = SubtitleController(
-        provider: SubtitleProvider.fromString(
-          data: engSubtitlesData,
-          type: SubtitleType.srt,
-        ),
-      );
-      await controller.initial();
-      final translatedWord = {
-        for (var entry in event.project.translatedWords.entries)
-          int.parse(entry.key): entry.value
-      };
-      emit(SubtitlesLoaded(
-          controller.subtitles, translatedWord));
     } catch (e) {
       emit(SubtitlesError('Ошибка при загрузке субтитров: $e'));
     }

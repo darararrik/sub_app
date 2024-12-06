@@ -22,7 +22,8 @@ class CardWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              context.go('/${project.id}', extra: project);
+              // Убедитесь, что project.id не null
+              context.go('/project', extra: project.id);
             },
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),

@@ -25,41 +25,48 @@ class _TranslateInputWidgetState extends State<TranslateInputWidget> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SizedBox(
-        height: 48,
-        child: TextField(
-          controller: controller,
-          onChanged: (value) {
-            setState(() {
-              widget.translatedSubtitles[widget.index] = value;
-            });
-          },
-          decoration: InputDecoration(
-            fillColor: const Color(0xFFFFFFFF),
-            filled: true,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color.fromARGB(0, 110, 110, 110),
-                width: 1,
-              ),
+      child: TextField(
+        controller: controller,
+        onChanged: (value) {
+          setState(() {
+            widget.translatedSubtitles[widget.index] = value;
+          });
+        },
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 12, // Высота контента
+            horizontal: 12, // Горизонтальные отступы
+          ),
+          fillColor: const Color(0xFFFFFFFF),
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(0, 110, 110, 110),
+              width: 1,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color.fromARGB(0, 110, 110, 110),
-                width: 1,
-              ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(0, 110, 110, 110),
+              width: 1,
             ),
-            hintText: "Введите перевод",
-            labelText: "Перевод",
-            labelStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: Colors.black,
-            ),
+          ),
+          hintText: "Введите перевод",
+          labelText: "Перевод",
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            color: Colors.black,
           ),
         ),
       ),

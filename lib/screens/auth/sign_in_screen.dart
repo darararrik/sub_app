@@ -23,6 +23,13 @@ class _SignInScreenState extends State<SignInScreen> {
     context.read<AuthBloc>().add(AuthCheckRequested());
   }
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Введите электронную почту';

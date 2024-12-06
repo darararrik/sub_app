@@ -19,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
   Future<void> _onUpdatePasswordRequested(
       UpdatePasswordRequested event, Emitter<AuthState> emit) async {
-    final user;
+    final User? user;
     try {
       emit(AuthLoading());
       await _authRepository.updatePassword(
@@ -33,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthErrorState(error: 'Не удалось обновить пароль.'));
     } finally {
       user = await _authRepository.getCurrentUser();
-      emit(AuthSuccess(user));
+      emit(AuthSuccess(user!));
     }
   }
 

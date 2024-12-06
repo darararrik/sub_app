@@ -6,12 +6,24 @@ import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/core/theme.dart';
 
-class ChangePasswordScreen extends StatelessWidget {
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
+
+  @override
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
+}
+
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController currentPasswordController =
       TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
 
-  ChangePasswordScreen({super.key});
+  final TextEditingController newPasswordController = TextEditingController();
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    currentPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
