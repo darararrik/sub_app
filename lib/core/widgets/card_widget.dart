@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
-import 'package:sub_app/screens/project/project_screen.dart';
 
 class CardWidget extends StatelessWidget {
   const CardWidget({
@@ -14,17 +14,15 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 16,),
+      margin: const EdgeInsets.only(
+        right: 16,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProjectScreen(project: project),
-                  ));
+              context.go('/${project.id}', extra: project);
             },
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),

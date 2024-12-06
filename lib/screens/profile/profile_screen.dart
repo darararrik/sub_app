@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/theme.dart';
 import 'package:sub_app/repositories/model/user/user.dart';
-import 'package:sub_app/screens/auth/sign_in_screen.dart';
-import 'package:sub_app/screens/change_password_screen/change_password_screen.dart';
-import 'package:sub_app/screens/delete_account/delete_account_screen.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
-import 'package:sub_app/screens/projects/projects_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -30,18 +27,12 @@ class ProfileScreen extends StatelessWidget {
               PopupMenuItem(
                   child: const Text('Сменить пароль'),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChangePasswordScreen()));
+                    context.go("/profile/changepassword");
                   }),
               PopupMenuItem(
                   child: const Text('Удалить аккаунт'),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DeleteAccountScreen()));
+                    context.go("/profile/delete");
                   }),
             ],
           ),
@@ -50,8 +41,7 @@ class ProfileScreen extends StatelessWidget {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Unauthenticated) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => SignInScreen()));
+            context.go("/signin");
           }
         },
         builder: (context, state) {

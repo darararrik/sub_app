@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/widgets/card_widget.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
@@ -120,7 +121,7 @@ class HorizntalListProjects extends StatelessWidget {
                   onTap: () {
                     selectedStatus =
                         status.displayName; // Устанавливаем выбранный статус
-                    Navigator.pop(context); // Закрытие модального окна
+                    context.pop();
                     context.read<ProjectBloc>().add(
                           UpdateProgressStatus(
                             project: project,

@@ -27,11 +27,10 @@ class CardSubtitleCubit extends Cubit<Map<int, bool>> {
   }
 
   void toggleExpansion(int index) {
-    if (project == null) return;
 
     final currentState = Map<int, bool>.from(state); // Копия текущего состояния
     final isExpanded =
-        currentState[index] ?? false; // Получаем текущее состояние
+        currentState[index] ?? true; // Получаем текущее состояние
     currentState[index] = !isExpanded; // Переключаем состояние
 
     emit(currentState); // Эмитируем новое состояние

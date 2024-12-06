@@ -22,6 +22,7 @@ dependencies:
   firebase_auth: ^5.3.4
   cloud_firestore: ^5.5.1
   rename: ^3.0.2
+  go_router: ^14.6.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

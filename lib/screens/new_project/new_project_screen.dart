@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
 import 'package:sub_app/core/theme.dart';
@@ -29,14 +29,16 @@ class NewProjectScreenState extends State<NewProjectScreen> {
     context.read<PickImageCubit>().resetState();
   }
 
+  // Получаем экземпляр SubPickCubit через GetIt
+//final SubPickCubit subPickCubit = GetIt.instance<SubPickCubit>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(
-            title: Text("Новый проект"),
+          SliverAppBar(
+            title: const Text("Новый проект"),
             surfaceTintColor: Colors.white,
           ),
           SliverPersistentHeader(
@@ -50,7 +52,7 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                 context
                     .read<ProjectBloc>()
                     .add(GetAllProjectsEvent(completer: null));
-                Navigator.pop(context); // Возврат на предыдущий экран
+                context.pop();
               } else if (state is ProjectErrorState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.errorMessage)),

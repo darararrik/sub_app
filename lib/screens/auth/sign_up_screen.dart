@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/theme.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
-import 'package:sub_app/screens/auth/sign_in_screen.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
-import 'package:sub_app/screens/profile/profile_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({super.key});
 
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController1 = TextEditingController();
@@ -55,22 +49,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    context.read<AuthBloc>().add(AuthCheckRequested());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            );
+            context.go("/profile");
           } else if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -174,12 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: ButtonWidget(
                           text: 'Войти',
                           onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SignInScreen()));
+                            context.go("/signin");
                           },
                           color: const Color.fromARGB(64, 116, 119, 253),
                         ),

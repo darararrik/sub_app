@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:subtitle/subtitle.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
@@ -48,7 +49,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
               padding: const EdgeInsets.only(right: 8.0),
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   child: const Text(
                     "Сохранить",

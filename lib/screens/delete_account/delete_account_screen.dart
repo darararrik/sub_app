@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
@@ -105,13 +106,13 @@ class DeleteAccountScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Закрыть диалог
+                context.pop();
               },
               child: const Text('Отмена'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Закрыть диалог
+                context.pop();
                 context.read<AuthBloc>().add(
                       DeleteAccountRequested(currentPassword: password),
                     );

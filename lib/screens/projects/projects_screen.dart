@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
-import 'package:sub_app/screens/auth/sign_up_screen.dart';
-import 'package:sub_app/screens/new_project/new_project_screen.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
 import 'package:sub_app/core/status.dart';
 import 'package:sub_app/screens/projects/widgets/horizntal_list_projects.dart';
@@ -35,8 +34,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+                context.go("/signin");
               },
               icon: const Icon(
                 Icons.account_circle_outlined,
@@ -145,10 +143,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       child: FloatingActionButton(
         tooltip: 'Создайте новый перевод',
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const NewProjectScreen()),
-          );
+          context.go('/newproject');
         },
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,

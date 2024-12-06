@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
@@ -48,7 +49,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.message)),
                   );
-                  Navigator.pop(context);
+                  context.pop();
                 } else if (state is AuthErrorState) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error ?? 'Ошибка')),
