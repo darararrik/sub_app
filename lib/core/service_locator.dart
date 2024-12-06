@@ -9,6 +9,7 @@ import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
+import 'package:sub_app/screens/project/cubit/card_subtitle_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -33,6 +34,7 @@ void setupServiceLocator() {
   // Регистрация BLoC
   getIt.registerFactory(() => ProjectBloc(getIt<ProjectRepo>()));
   getIt.registerFactory(() => SubtitlesBloc(getIt<ProjectRepo>()));
+  getIt.registerFactory(() => CardSubtitleCubit(getIt<ProjectRepo>()));
 
   // Регистрация SubPickCubit
   getIt.registerFactory(() => SubPickCubit());

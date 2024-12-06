@@ -19,7 +19,7 @@ class HorizntalListProjects extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,9 +32,12 @@ class HorizntalListProjects extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 240,
+            height: 16,
+          ),
+          SizedBox(
+            height: 250,
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               scrollDirection: Axis.horizontal,
               itemCount: projects.length,
               itemBuilder: (context, index) {
@@ -58,6 +61,14 @@ class HorizntalListProjects extends StatelessWidget {
                           child: const Text('Изменить прогресс'),
                           onTap: () {
                             _showProgressBottomSheet(context, project);
+                          },
+                        ),
+                        PopupMenuItem<String>(
+                          child: const Text('Удалить'),
+                          onTap: () {
+                            context
+                                .read<ProjectBloc>()
+                                .add(DeleteProject(project: project));
                           },
                         ),
                       ],

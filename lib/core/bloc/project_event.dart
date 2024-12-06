@@ -29,3 +29,11 @@ class GetAllProjectsEvent extends ProjectEvent {
   @override
   List<Object?> get props => [completer];
 }
+
+class DeleteProject extends ProjectEvent {
+  final Project project;
+
+  DeleteProject({required this.project});
+  @override
+  List<Object?> get props => [project];
+}

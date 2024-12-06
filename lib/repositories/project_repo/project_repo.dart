@@ -9,7 +9,7 @@ class ProjectRepo implements IProjectRepo {
 
   /// Создать новый проект
   @override
-  Future<void> createProject(Project newProject) async {
+  void createProject(Project newProject) {
     realm.write(() => realm.add(newProject));
   }
 
@@ -37,8 +37,8 @@ class ProjectRepo implements IProjectRepo {
   }
 
   @override
-  Future<void> updateTranslationProgress(
-      Project project, Map<String, String> translations, String status) async {
+  void updateTranslationProgress(
+      Project project, Map<String, String> translations, String status) {
     try {
       // Открытие транзакции Realm
       realm.write(() {
@@ -55,7 +55,7 @@ class ProjectRepo implements IProjectRepo {
   }
 
   @override
-  Future<void> updateProgressStatus(Project project, String status) async {
+  void updateProgressStatus(Project project, String status) {
     try {
       realm.write(() {
         project.status = status;
@@ -64,5 +64,14 @@ class ProjectRepo implements IProjectRepo {
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// Обновить состояние раскрытия строк
+  @override
+  void updateExpansionState(Project project, Map<String, bool> isExpanded) {
+    realm.write(() {
+      project.isExpanded.addAll(isExpanded);
+      realm.add(project, update: true); // Записываем изменения
+    });
   }
 }

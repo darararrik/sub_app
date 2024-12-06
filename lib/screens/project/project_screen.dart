@@ -62,9 +62,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
           builder: (context, state) {
             if (state is SubtitlesLoaded) {
               translatedSubtitles = state.translatedWords;
-
               return _buildSubtitleList(
-                  state.engSubtitles, translatedSubtitles, widget.project);
+                  state.engSubtitles, translatedSubtitles);
             }
             if (state is Loading) {
               return const Center(
@@ -86,21 +85,19 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
-  Widget _buildSubtitleList(List<Subtitle> subtitles,
-      Map<int, String> translatedWords, Project project) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 24),
-        itemCount: subtitles.length,
-        itemBuilder: (context, index) {
-          return CardSubtitleWidget(
-            index: index,
-            subtitleWord: subtitles[index].data,
-            translatedSubtitles: translatedSubtitles,
-          );
-        },
-      ),
+  Widget _buildSubtitleList(
+      List<Subtitle> subtitles, Map<int, String> translatedWords) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      itemCount: subtitles.length,
+      itemBuilder: (context, index) {
+        return CardSubtitleWidget(
+          index: index,
+          subtitleWord: subtitles[index].data,
+          translatedSubtitles: translatedSubtitles,
+          project: widget.project,
+        );
+      },
     );
   }
 }

@@ -18,7 +18,6 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
     on<LoadSubtitles>(_loadSubtitles);
   }
 
-  // Сохранение переведённых субтитров
   FutureOr<void> _localeSave(Save event, emit) async {
     if (state is SubtitlesLoaded) {
       try {
@@ -64,8 +63,8 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
         for (var entry in event.project.translatedWords.entries)
           int.parse(entry.key): entry.value
       };
-
-      emit(SubtitlesLoaded(controller.subtitles, translatedWord));
+      emit(SubtitlesLoaded(
+          controller.subtitles, translatedWord));
     } catch (e) {
       emit(SubtitlesError('Ошибка при загрузке субтитров: $e'));
     }

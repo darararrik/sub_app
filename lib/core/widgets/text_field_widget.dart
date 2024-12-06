@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextFieldWidget extends StatelessWidget {
   TextFieldWidget({
@@ -7,15 +8,19 @@ class TextFieldWidget extends StatelessWidget {
     required this.controller,
     this.validator,
     required this.obscureText,
+    this.maxLength = 100,
   });
   final String label;
   final TextEditingController controller;
   final bool obscureText;
   String? Function(String?)? validator;
-
+  int maxLength;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(maxLength), // Максимум 20 символов
+      ],
       obscureText: obscureText,
       validator: validator,
       controller: controller,

@@ -14,7 +14,7 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 16),
+      margin: const EdgeInsets.only(right: 16,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -23,7 +23,7 @@ class CardWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>  ProjectScreen(project: project),
+                    builder: (context) => ProjectScreen(project: project),
                   ));
             },
             child: ClipRRect(
@@ -41,9 +41,13 @@ class CardWidget extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          Text(
-            project.name,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+          SizedBox(
+            width: 116,
+            child: Text(
+              project.name,
+              overflow: TextOverflow.fade,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
         ],
       ),

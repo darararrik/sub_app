@@ -6,6 +6,7 @@ import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
+import 'package:sub_app/screens/project/cubit/card_subtitle_cubit.dart';
 import 'package:sub_app/screens/projects/projects_screen.dart';
 import 'package:sub_app/core/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,6 +35,7 @@ class SubApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<PickImageCubit>()),
         BlocProvider(create: (context) => getIt<SubPickCubit>()),
         BlocProvider(create: (context) => getIt<AuthBloc>()),
+        BlocProvider(create: (context) => getIt<CardSubtitleCubit>()),
       ],
       child: MaterialApp(
         title: 'SubApp',

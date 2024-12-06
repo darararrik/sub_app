@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
+import 'package:sub_app/core/status.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo_interface.dart';
 
@@ -16,6 +17,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     on<CreateProjectEvent>(_onCreateProject);
     on<GetAllProjectsEvent>(_onGetAllProjects);
     on<UpdateProgressStatus>(_updateStatus);
+    on<DeleteProject>(_onDeleteProject);
   }
   // Логика добавления проекта
   Future<void> _onCreateProject(
@@ -43,18 +45,42 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   Future<void> _onGetAllProjects(
       GetAllProjectsEvent event, Emitter<ProjectState> emit) async {
     try {
+      // Отображаем состояние загрузки, только если текущее состояние не загрузка
       if (state is! ProjectLoadingState) {
         emit(ProjectLoadingState());
       }
+
+      // Получаем проекты из репозитория
       final projects = repo.getAllProjects();
+
+      // Проверяем, пуст ли список
       if (projects.isEmpty) {
-        emit(ProjectInitial());
+        emit(ProjectsEmptyState());
       } else {
-        emit(ProjectsLoadedState(projects: projects));
+        // Разделяем проекты по статусу
+        final projectsN = projects
+            .where(
+                (project) => project.status == Status.notTranslated.displayName)
+            .toList();
+        final projectsI = projects
+            .where((project) => project.status == Status.inProgress.displayName)
+            .toList();
+        final projectsT = projects
+            .where((project) => project.status == Status.completed.displayName)
+            .toList();
+
+        // Эмитируем состояние с загруженными проектами
+        emit(ProjectsLoadedState(
+          projectsN: projectsN,
+          projectsI: projectsI,
+          projectsT: projectsT,
+        ));
       }
     } catch (e) {
+      // Эмитируем состояние ошибки
       emit(ProjectErrorState(errorMessage: 'Ошибка загрузки проектов: $e'));
     } finally {
+      // Завершаем выполнение через Completer, если он задан
       event.completer?.complete();
     }
   }
@@ -70,10 +96,32 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       if (projects.isEmpty) {
         emit(ProjectInitial());
       } else {
-        emit(ProjectsLoadedState(projects: projects));
+        final projectsN = projects
+            .where(
+                (project) => project.status == Status.notTranslated.displayName)
+            .toList();
+        final projectsI = projects
+            .where((project) => project.status == Status.inProgress.displayName)
+            .toList();
+        final projectsT = projects
+            .where((project) => project.status == Status.completed.displayName)
+            .toList();
+        emit(ProjectsLoadedState(
+            projectsI: projectsI, projectsT: projectsT, projectsN: projectsN));
       }
     } catch (e) {
-      emit(ProjectErrorState(errorMessage: 'Ошибка при сохранении файла: $e'));
+      emit(ProjectErrorState(errorMessage: 'Ошибка при удалении файла: $e'));
+    }
+  }
+
+  FutureOr<void> _onDeleteProject(
+      DeleteProject event, Emitter<ProjectState> emit) async {
+    try {
+      repo.deleteProject(event.project);
+      emit(ProjectDeleted());
+    } catch (e) {
+      emit(ProjectErrorState(errorMessage: 'Ошибка при удалении файла: $e'));
     }
   }
 }
+

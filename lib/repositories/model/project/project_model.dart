@@ -10,7 +10,7 @@ class _Project {
   late String engSubtitleFilePath; // Путь к файлу субтитров
   late Map<String, String> translatedWords; // Путь к файлу субтитров
   late Map<String, String> syllables = {};
-
+  late Map<String, bool> isExpanded = {};
   late String status = "Не переведено";
 
   late List<int> imageBytes; // Массив байтов для изображения

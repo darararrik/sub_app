@@ -10,4 +10,8 @@ abstract interface class IProjectRepo {
   void updateTranslationProgress(
       Project project, Map<String, String> translations, String status);
   void updateProgressStatus(Project project, String status);
+  void updateExpansionState(
+    Project project,
+    Map<String, bool> isExpanded,
+  );
 }

@@ -7,7 +7,7 @@ abstract class SubtitlesEvent extends Equatable {
 
 class LoadSubtitles extends SubtitlesEvent {
   final Project project;
-
+  
   LoadSubtitles(this.project);
 
   @override
@@ -45,5 +45,4 @@ class Save extends SubtitlesEvent {
   @override
   List<Object?> get props => [project, translatedData];
 }
-
 

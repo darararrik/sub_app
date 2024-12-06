@@ -10,7 +10,6 @@ import 'package:sub_app/core/widgets/shadow_header_delegate.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/new_project/widgets/pick_image_card.dart';
-import 'package:sub_app/core/status.dart';
 
 class NewProjectScreen extends StatefulWidget {
   const NewProjectScreen({super.key});
@@ -78,55 +77,22 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                               width: 12,
                             ),
                             Expanded(
-                                child: Column(
-                              children: [
-                                SizedBox(
-                                    height: 48,
-                                    child: TextFieldWidget(
-                                      obscureText: false,
-                                      label: "Название проекта",
-                                      controller: nameController,
-                                    )),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Expanded(
-                                      child: Text(
-                                        softWrap:
-                                            true, // Включаем перенос текста
-                                        "Статус проекта:",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                    DropdownButton<String>(
-                                      value: selectedStatus,
-                                      items: <String>[
-                                        Status.notTranslated.displayName,
-                                        Status.inProgress.displayName,
-                                        Status.completed.displayName,
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedStatus = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      height: 48,
+                                      child: TextFieldWidget(
+                                        maxLength: 25,
+                                        obscureText: false,
+                                        label: "Название проекта",
+                                        controller: nameController,
+                                      )),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 32),
@@ -137,6 +103,7 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                         ),
                         const SizedBox(height: 12),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,8 +144,10 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    final result =
-                                        await FilePicker.platform.pickFiles();
+                                    final result = await FilePicker.platform
+                                        .pickFiles(
+                                            type: FileType.custom,
+                                            allowedExtensions: ['srt']);
                                     if (result != null &&
                                         result.files.isNotEmpty) {
                                       engFilePath = result.files.single.path!;

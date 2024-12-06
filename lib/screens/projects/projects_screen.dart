@@ -60,50 +60,57 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               );
             }
           },
-          child: BlocBuilder<ProjectBloc, ProjectState>(
+          child: BlocConsumer<ProjectBloc, ProjectState>(
+            listener: (BuildContext context, ProjectState state) {
+              if (state is ProjectDeleted) {
+                context
+                    .read<ProjectBloc>()
+                    .add(GetAllProjectsEvent(completer: null));
+              }
+            },
             builder: (context, state) {
               if (state is ProjectLoadingState) {
-                return _loadingState();
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
               if (state is ProjectsLoadedState) {
-                final projects = state.projects;
-                final projectsN = projects
-                    .where((project) => project.status == "Не переведено")
-                    .toList();
-                final projectsI = projects
-                    .where((project) => project.status == "В процессе")
-                    .toList();
-                final projectsT = projects
-                    .where((project) => project.status == "Завершено")
-                    .toList();
-                return Column(
-                  children: [
-                    if (projectsN.isNotEmpty) ...[
-                      HorizntalListProjects(
-                        projects: projectsN,
-                        name: Status.notTranslated.displayName,
-                      ),
+                return SingleChildScrollView(
+                  padding: EdgeInsets.only(top: 24),
+                  child: Column(
+                    children: [
+                      if (state.projectsN.isNotEmpty) ...[
+                        HorizntalListProjects(
+                          projects: state.projectsN,
+                          name: Status.notTranslated.displayName,
+                        ),
+                      ],
+                      if (state.projectsI.isNotEmpty) ...[
+                        HorizntalListProjects(
+                          projects: state.projectsI,
+                          name: Status.inProgress.displayName,
+                        ),
+                      ],
+                      if (state.projectsT.isNotEmpty) ...[
+                        HorizntalListProjects(
+                          projects: state.projectsT,
+                          name: Status.completed.displayName,
+                        ),
+                      ]
                     ],
-                    if (projectsI.isNotEmpty) ...[
-                      HorizntalListProjects(
-                        projects: projectsI,
-                        name: Status.inProgress.displayName,
-                      ),
-                    ],
-                    if (projectsT.isNotEmpty) ...[
-                      HorizntalListProjects(
-                        projects: projectsT,
-                        name: Status.completed.displayName,
-                      ),
-                    ]
-                  ],
+                  ),
                 );
               }
               if (state is ProjectErrorState) {
-                return _errorState(state);
+                return Center(
+                  child: Text(
+                    'Ошибка: ${state.errorMessage}',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
               }
-              if (state is ProjectInitial) {
-                return const Center(
+              if (state is ProjectsEmptyState) {
+                return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,27 +130,12 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   ),
                 );
               }
-              return const SizedBox();
+              return SizedBox();
             },
           ),
         ),
       ),
       floatingActionButton: _floatButton(context),
-    );
-  }
-
-  Center _errorState(ProjectErrorState state) {
-    return Center(
-      child: Text(
-        'Ошибка: ${state.errorMessage}',
-        style: const TextStyle(color: Colors.red),
-      ),
-    );
-  }
-
-  Center _loadingState() {
-    return const Center(
-      child: CircularProgressIndicator(),
     );
   }
 

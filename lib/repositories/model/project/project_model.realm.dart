@@ -16,6 +16,7 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     String engSubtitleFilePath, {
     Map<String, String> translatedWords = const {},
     Map<String, String> syllables = const {},
+    Map<String, bool> isExpanded = const {},
     String status = "Не переведено",
     Iterable<int> imageBytes = const [],
   }) {
@@ -31,6 +32,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
         this, 'translatedWords', RealmMap<String>(translatedWords));
     RealmObjectBase.set<RealmMap<String>>(
         this, 'syllables', RealmMap<String>(syllables));
+    RealmObjectBase.set<RealmMap<bool>>(
+        this, 'isExpanded', RealmMap<bool>(isExpanded));
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set<RealmList<int>>(
         this, 'imageBytes', RealmList<int>(imageBytes));
@@ -70,6 +73,13 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       throw RealmUnsupportedSetError();
 
   @override
+  RealmMap<bool> get isExpanded =>
+      RealmObjectBase.get<bool>(this, 'isExpanded') as RealmMap<bool>;
+  @override
+  set isExpanded(covariant RealmMap<bool> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
   String get status => RealmObjectBase.get<String>(this, 'status') as String;
   @override
   set status(String value) => RealmObjectBase.set(this, 'status', value);
@@ -99,6 +109,7 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       'engSubtitleFilePath': engSubtitleFilePath.toEJson(),
       'translatedWords': translatedWords.toEJson(),
       'syllables': syllables.toEJson(),
+      'isExpanded': isExpanded.toEJson(),
       'status': status.toEJson(),
       'imageBytes': imageBytes.toEJson(),
     };
@@ -119,6 +130,7 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(engSubtitleFilePath),
           translatedWords: fromEJson(ejson['translatedWords']),
           syllables: fromEJson(ejson['syllables'], defaultValue: const {}),
+          isExpanded: fromEJson(ejson['isExpanded'], defaultValue: const {}),
           status: fromEJson(ejson['status'], defaultValue: "Не переведено"),
           imageBytes: fromEJson(ejson['imageBytes']),
         ),
@@ -136,6 +148,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('translatedWords', RealmPropertyType.string,
           collectionType: RealmCollectionType.map),
       SchemaProperty('syllables', RealmPropertyType.string,
+          collectionType: RealmCollectionType.map),
+      SchemaProperty('isExpanded', RealmPropertyType.bool,
           collectionType: RealmCollectionType.map),
       SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('imageBytes', RealmPropertyType.int,

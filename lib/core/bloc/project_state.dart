@@ -25,12 +25,18 @@ class ProjectErrorState extends ProjectState {
 
 // Состояние для отображения списка проектов
 class ProjectsLoadedState extends ProjectState {
-  final List<Project> projects;
+  final List<Project> projectsN;
+  final List<Project> projectsT;
+  final List<Project> projectsI;
 
-  ProjectsLoadedState({required this.projects});
+  ProjectsLoadedState({
+    required this.projectsN,
+    required this.projectsT,
+    required this.projectsI,
+  });
 
   @override
-  List<Object?> get props => [projects];
+  List<Object?> get props => [projectsN, projectsT, projectsI];
 }
 
 class ProjectLoadingState extends ProjectState {
@@ -52,4 +58,14 @@ class UpdateProgressStatus extends ProjectEvent {
   });
   @override
   List<Object?> get props => [project];
+}
+
+class ProjectsEmptyState extends ProjectState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ProjectDeleted extends ProjectState {
+  @override
+  List<Object?> get props => [];
 }
