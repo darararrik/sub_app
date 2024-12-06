@@ -1,16 +1,25 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:sub_app/core/theme.dart';
 
 class ButtonWidget extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool hasColor; // Добавлен булевый параметр
-  final Color color; // Добавлен булевый параметр
+  final bool hasColorText; // Добавлен булевый параметр
 
-  const ButtonWidget({
+  final Color color;
+
+  double? width;
+
+  double? height; // Добавлен булевый параметр
+
+  ButtonWidget({
     super.key,
     required this.text,
     required this.onPressed,
     this.hasColor = true,
+    this.hasColorText = true,
     required this.color,
   });
 
@@ -18,23 +27,23 @@ class ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all(hasColor ? color : Colors.transparent),
-        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(36),
-            side: const BorderSide(
-              color: Colors.transparent,
-              width: 0,
+        onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor:
+              WidgetStateProperty.all(hasColor ? color : Colors.transparent),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: const BorderSide(
+                color: Colors.transparent,
+                width: 0,
+              ),
             ),
           ),
         ),
-      ),
-      child: Text(text,
-          style: theme.textTheme.labelLarge!
-              .copyWith(fontSize: 18, color: hasColor ? Colors.white : color)),
-    );
+        child: Text(text,
+            style: theme.textTheme.labelLarge!.copyWith(
+                fontSize: 18,
+                color: hasColorText ? Colors.white : primaryColor)));
   }
 }

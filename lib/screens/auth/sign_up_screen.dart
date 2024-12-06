@@ -63,6 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
@@ -83,82 +84,107 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if (state is AuthLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          return Center(
-            child: Form(
-              key: _formKey,
+          return Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text(
-                    "Регистрация",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Создайте аккаунт",
+                        style: TextStyle(
+                            fontSize: 36,
+                            color: primaryColor,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      Text(
+                        "Введите детали",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Column(
+                        children: [
+                          Column(
+                            children: [
+                              TextFieldWidget(
+                                obscureText: false,
+                                controller: emailController,
+                                validator: _validateEmail,
+                                hintText: 'Введи электронную почту',
+                                labelText: 'Электронная почта',
+                              ),
+                              const SizedBox(height: 24),
+                              TextFieldWidget(
+                                hintText: "Пароль",
+                                controller: passwordController1,
+                                obscureText: true,
+                                validator: _validatePassword,
+                                labelText: 'Введите пароль',
+                              ),
+                              const SizedBox(height: 24),
+                              TextFieldWidget(
+                                controller: passwordController2,
+                                obscureText: true,
+                                validator: _validateConfirmPassword,
+                                hintText: 'Повторно введите пароль',
+                                labelText: 'Повторите пароль',
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 36),
+                        ],
+                      ),
+                    ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Создайте аккаунт, чтобы синхронизировать переводы на своих устройствах",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(height: 36),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      children: [
-                        TextFieldWidget(
-                          obscureText: false,
-                          controller: emailController,
-                          validator: _validateEmail,
-                          label: 'Электронная почта',
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ButtonWidget(
+                          hasColor: true,
+                          hasColorText: true,
+                          text: 'Создать аккаунт',
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthBloc>().add(SignUpRequested(
+                                    email: emailController.text.trim(),
+                                    password: passwordController1.text.trim(),
+                                  ));
+                            }
+                          },
+                          color: primaryColor,
                         ),
-                        const SizedBox(height: 24),
-                        TextFieldWidget(
-                          label: "Введите пароль",
-                          controller: passwordController1,
-                          obscureText: true,
-                          validator: _validatePassword,
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ButtonWidget(
+                          text: 'Войти',
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SignInScreen()));
+                          },
+                          color: const Color.fromARGB(64, 116, 119, 253),
                         ),
-                        const SizedBox(height: 24),
-                        TextFieldWidget(
-                          controller: passwordController2,
-                          obscureText: true,
-                          validator: _validateConfirmPassword,
-                          label: 'Повторно введите пароль',
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 36),
-                  SizedBox(
-                    width: 300,
-                    child: ButtonWidget(
-                      text: 'Создать аккаунт',
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(SignUpRequested(
-                                email: emailController.text.trim(),
-                                password: passwordController1.text.trim(),
-                              ));
-                        }
-                      },
-                      color: primaryColor,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    child: ButtonWidget(
-                      hasColor: false,
-                      text: 'Войти',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignInScreen()));
-                      },
-                      color: primaryColor,
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -84,8 +84,9 @@ class NewProjectScreenState extends State<NewProjectScreen> {
                                       child: TextFieldWidget(
                                         maxLength: 25,
                                         obscureText: false,
-                                        label: "Название проекта",
+                                        hintText: "Введите имя проекта",
                                         controller: nameController,
+                                        labelText: 'Имя проекта',
                                       )),
                                   const SizedBox(
                                     height: 12,

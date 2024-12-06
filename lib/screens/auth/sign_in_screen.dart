@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/theme.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
+import 'package:sub_app/screens/auth/sign_up_screen.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 import 'package:sub_app/screens/profile/profile_screen.dart';
 
@@ -22,7 +23,6 @@ class _SignInScreenState extends State<SignInScreen> {
     if (value == null || value.isEmpty) {
       return 'Введите электронную почту';
     }
-    // Простая проверка формата email
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     if (!emailRegex.hasMatch(value)) {
       return 'Некорректный формат электронной почты';
@@ -50,7 +50,6 @@ class _SignInScreenState extends State<SignInScreen> {
               context,
               MaterialPageRoute(builder: (context) => const ProfileScreen()),
             );
-            // Навигация на экран профиля
           } else if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -62,63 +61,64 @@ class _SignInScreenState extends State<SignInScreen> {
         },
         builder: (BuildContext context, AuthState state) {
           if (state is AuthLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
-          return Center(
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Form(
-              key: _formKey, // Добавляем GlobalKey для формы
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Авторизация",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Войдите в аккаунт",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      children: [
-                        TextFieldWidget(
-                          controller: emailController,
-                          validator: _validateEmail,
-                          label: 'Электронная почта',
-                          obscureText: false,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Авторизация",
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.w700,
+                          color: primaryColor,
                         ),
-                        const SizedBox(
-                          height: 24,
+                      ),
+                      const Text(
+                        "Введите данные для входа",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w400,
                         ),
-                        TextFieldWidget(
-                          controller: passwordController,
-                          obscureText: true,
-                          validator: _validatePassword,
-                          label: 'Введите пароль',
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 24),
+                      // Поле ввода email
+                      TextFieldWidget(
+                        hintText: "Введите электронную почту",
+                        controller: emailController,
+                        validator: _validateEmail,
+                        labelText: 'Электронная почта',
+                        obscureText: false,
+                      ),
+                      const SizedBox(height: 24),
+                      // Поле ввода пароля
+                      TextFieldWidget(
+                        controller: passwordController,
+                        obscureText: true,
+                        validator: _validatePassword,
+                        labelText: 'Пароль',
+                        hintText: 'Введите пароль',
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 36,
-                  ),
+                  const SizedBox(height: 36),
+                  // Кнопка входа
                   SizedBox(
-                    width: 300,
+                    width: double.infinity,
+                    height: 52,
                     child: ButtonWidget(
                       text: 'Войти',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Если валидация успешна, выполняем действие
                           context.read<AuthBloc>().add(
                                 SignInRequested(
                                   email: emailController.text.trim(),
@@ -128,6 +128,23 @@ class _SignInScreenState extends State<SignInScreen> {
                         }
                       },
                       color: primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Кнопка перехода на экран регистрации
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ButtonWidget(
+                      text: 'Создать аккаунт',
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpScreen()),
+                        );
+                      },
+                      color: const Color.fromARGB(64, 116, 119, 253),
                     ),
                   ),
                 ],

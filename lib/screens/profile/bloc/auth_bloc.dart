@@ -19,8 +19,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
   Future<void> _onUpdatePasswordRequested(
       UpdatePasswordRequested event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
     try {
+      emit(AuthLoading());
       await _authRepository.updatePassword(
         newPassword: event.newPassword,
         currentPassword: event.currentPassword,
@@ -43,10 +43,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Unauthenticated());
     } on FirebaseAuthException catch (e) {
       emit(AuthErrorState(error: e.message));
-      emit(Unauthenticated());
     } catch (e) {
       emit(const AuthErrorState(error: 'Не удалось удалить аккаунт.'));
-      emit(Unauthenticated());
     }
   }
 

@@ -4,13 +4,16 @@ import 'package:flutter/services.dart';
 class TextFieldWidget extends StatelessWidget {
   TextFieldWidget({
     super.key,
-    required this.label,
+    required this.hintText,
+    required this.labelText,
     required this.controller,
     this.validator,
     required this.obscureText,
     this.maxLength = 100,
   });
-  final String label;
+  final String hintText;
+  final String labelText;
+
   final TextEditingController controller;
   final bool obscureText;
   String? Function(String?)? validator;
@@ -65,9 +68,9 @@ class TextFieldWidget extends StatelessWidget {
               width: 1,
             ), // Цвет полоски при фокусе (не изменяется)
           ),
-          label: Text(
-            label,
-          )),
+          label: Text(labelText),
+          hintText: hintText,
+          hintStyle: TextStyle(fontWeight: FontWeight.w400)),
     );
   }
 }

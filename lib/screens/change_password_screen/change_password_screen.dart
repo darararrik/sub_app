@@ -30,14 +30,16 @@ class ChangePasswordScreen extends StatelessWidget {
             const SizedBox(height: 16),
             TextFieldWidget(
               controller: currentPasswordController,
-              label: 'Текущий пароль',
+              hintText: 'Введите текущий пароль',
               obscureText: true,
+              labelText: 'Текущий пароль',
             ),
             const SizedBox(height: 16),
             TextFieldWidget(
               controller: newPasswordController,
-              label: 'Новый пароль',
+              hintText: 'Введите новый пароль',
               obscureText: true,
+              labelText: 'Новый пароль',
             ),
             const SizedBox(height: 24),
             BlocConsumer<AuthBloc, AuthState>(

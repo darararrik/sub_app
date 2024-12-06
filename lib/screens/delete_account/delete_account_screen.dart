@@ -1,25 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/core/widgets/text_field_widget.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
-import 'package:flutter/material.dart';
 
 class DeleteAccountScreen extends StatelessWidget {
   DeleteAccountScreen({super.key});
 
   final TextEditingController controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccessMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-            Navigator.pop(context); // Закрытие экрана после успешного удаления
-          } else if (state is AuthErrorState) {
+          if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                   content: Text(state.error ?? 'Ошибка при удалении аккаунта')),
@@ -27,44 +23,68 @@ class DeleteAccountScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Введите пароль",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 24),
-                  TextFieldWidget(
-                    obscureText: true,
-                    label: 'Введите пароль',
-                    controller: controller,
-                  ),
-                  const SizedBox(height: 24),
-                  if (state is AuthLoading)
-                    const CircularProgressIndicator()
-                  else
-                    SizedBox(
-                      width: 200,
-                      child: ButtonWidget(
-                        text: "Удалить аккаунт",
-                        onPressed: () {
-                          final password = controller.text.trim();
-                          if (password.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Введите пароль')),
-                            );
-                            return;
-                          }
-                          _showConfirmationDialog(context, password);
-                        },
-                        color: Theme.of(context).colorScheme.error,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Удаление аккаунта",
+                        style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.w700,
+                            color: Theme.of(context).primaryColor),
                       ),
-                    ),
+                      Text(
+                        "Введите пароль для подтверждения",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      // Поле ввода пароля
+                      TextFieldWidget(
+                        obscureText: true,
+                        controller: controller,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Введите пароль';
+                          }
+                          return null;
+                        },
+                        hintText: 'Введите пароль',
+                        labelText: 'Пароль',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 36),
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ButtonWidget(
+                          hasColorText: true,
+                          text: "Удалить аккаунт",
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              final password = controller.text.trim();
+                              _showConfirmationDialog(context, password);
+                            }
+                          },
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
