@@ -7,7 +7,12 @@ abstract interface class IProjectRepo {
   List<Project> getAllProjects();
   Project? getProject(String projectId);
   void updateTranslationProgress(
-      Project project, Map<String, String> translations, String status);
+    Project project,
+    Map<String, String> translations,
+    String status,
+    Map<String, String> syllTranslated,
+    Map<String, String> syllNotTranslated,
+  );
   void updateProgressStatus(Project project, String status);
   void updateExpansionState(
     Project project,

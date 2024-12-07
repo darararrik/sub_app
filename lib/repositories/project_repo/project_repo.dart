@@ -19,6 +19,7 @@ class ProjectRepo implements IProjectRepo {
     // Добавляем проект в Realm
     realm.write(() => realm.add(newProject));
   }
+
   void _incrementProjectCount() {
     final currentCount = sharedPreferences.getInt('project_count') ?? 0;
     sharedPreferences.setInt('project_count', currentCount + 1);
@@ -54,13 +55,20 @@ class ProjectRepo implements IProjectRepo {
 
   @override
   void updateTranslationProgress(
-      Project project, Map<String, String> translations, String status) {
+    Project project,
+    Map<String, String> translations,
+    String status,
+    Map<String, String> syllTranslated,
+    Map<String, String> syllNotTranslated,
+  ) {
     try {
       // Открытие транзакции Realm
       realm.write(() {
         // Обновляем переведенные данные и статус проекта
         project.translatedWords.addAll(translations);
         project.status = status;
+        project.syllablesNotTranslated.addAll(syllNotTranslated);
+        project.syllablesTranslated.addAll(syllTranslated);
 
         // Обновляем проект в базе данных
         realm.add(project, update: true);

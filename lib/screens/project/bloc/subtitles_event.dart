@@ -38,10 +38,17 @@ class SaveSubtitlesToFile extends SubtitlesEvent {
 class Save extends SubtitlesEvent {
   final Project project;
   final Map<int, String> translatedData;
+  final Map<int, String> syllablesTranslated;
+
+  final Map<int, String> syllablesNotTranslated;
+
   Save({
+    required this.syllablesTranslated,
+    required this.syllablesNotTranslated,
     required this.project,
     required this.translatedData,
   });
   @override
-  List<Object?> get props => [project, translatedData];
+  List<Object?> get props =>
+      [project, translatedData, syllablesNotTranslated, syllablesTranslated];
 }

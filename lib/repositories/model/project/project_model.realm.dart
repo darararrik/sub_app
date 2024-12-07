@@ -15,7 +15,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     String name,
     String engSubtitleFilePath, {
     Map<String, String> translatedWords = const {},
-    Map<String, String> syllables = const {},
+    Map<String, String> syllablesNotTranslated = const {},
+    Map<String, String> syllablesTranslated = const {},
     Map<String, bool> isExpanded = const {},
     String status = "Не переведено",
     Iterable<int> imageBytes = const [],
@@ -30,8 +31,10 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'engSubtitleFilePath', engSubtitleFilePath);
     RealmObjectBase.set<RealmMap<String>>(
         this, 'translatedWords', RealmMap<String>(translatedWords));
+    RealmObjectBase.set<RealmMap<String>>(this, 'syllablesNotTranslated',
+        RealmMap<String>(syllablesNotTranslated));
     RealmObjectBase.set<RealmMap<String>>(
-        this, 'syllables', RealmMap<String>(syllables));
+        this, 'syllablesTranslated', RealmMap<String>(syllablesTranslated));
     RealmObjectBase.set<RealmMap<bool>>(
         this, 'isExpanded', RealmMap<bool>(isExpanded));
     RealmObjectBase.set(this, 'status', status);
@@ -66,10 +69,19 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       throw RealmUnsupportedSetError();
 
   @override
-  RealmMap<String> get syllables =>
-      RealmObjectBase.get<String>(this, 'syllables') as RealmMap<String>;
+  RealmMap<String> get syllablesNotTranslated =>
+      RealmObjectBase.get<String>(this, 'syllablesNotTranslated')
+          as RealmMap<String>;
   @override
-  set syllables(covariant RealmMap<String> value) =>
+  set syllablesNotTranslated(covariant RealmMap<String> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  RealmMap<String> get syllablesTranslated =>
+      RealmObjectBase.get<String>(this, 'syllablesTranslated')
+          as RealmMap<String>;
+  @override
+  set syllablesTranslated(covariant RealmMap<String> value) =>
       throw RealmUnsupportedSetError();
 
   @override
@@ -108,7 +120,8 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       'name': name.toEJson(),
       'engSubtitleFilePath': engSubtitleFilePath.toEJson(),
       'translatedWords': translatedWords.toEJson(),
-      'syllables': syllables.toEJson(),
+      'syllablesNotTranslated': syllablesNotTranslated.toEJson(),
+      'syllablesTranslated': syllablesTranslated.toEJson(),
       'isExpanded': isExpanded.toEJson(),
       'status': status.toEJson(),
       'imageBytes': imageBytes.toEJson(),
@@ -129,7 +142,10 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(name),
           fromEJson(engSubtitleFilePath),
           translatedWords: fromEJson(ejson['translatedWords']),
-          syllables: fromEJson(ejson['syllables'], defaultValue: const {}),
+          syllablesNotTranslated: fromEJson(ejson['syllablesNotTranslated'],
+              defaultValue: const {}),
+          syllablesTranslated:
+              fromEJson(ejson['syllablesTranslated'], defaultValue: const {}),
           isExpanded: fromEJson(ejson['isExpanded'], defaultValue: const {}),
           status: fromEJson(ejson['status'], defaultValue: "Не переведено"),
           imageBytes: fromEJson(ejson['imageBytes']),
@@ -147,7 +163,9 @@ class Project extends _Project with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('engSubtitleFilePath', RealmPropertyType.string),
       SchemaProperty('translatedWords', RealmPropertyType.string,
           collectionType: RealmCollectionType.map),
-      SchemaProperty('syllables', RealmPropertyType.string,
+      SchemaProperty('syllablesNotTranslated', RealmPropertyType.string,
+          collectionType: RealmCollectionType.map),
+      SchemaProperty('syllablesTranslated', RealmPropertyType.string,
           collectionType: RealmCollectionType.map),
       SchemaProperty('isExpanded', RealmPropertyType.bool,
           collectionType: RealmCollectionType.map),

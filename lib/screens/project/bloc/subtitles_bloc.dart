@@ -26,9 +26,17 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
           for (var entry in event.translatedData.entries)
             entry.key.toString(): entry.value
         };
+        final Map<String, String> syllTranslated = {
+          for (var entry in event.syllablesTranslated.entries)
+            entry.key.toString(): entry.value
+        };
+        final Map<String, String> syllNotTranslated = {
+          for (var entry in event.syllablesNotTranslated.entries)
+            entry.key.toString(): entry.value
+        };
         // Сохраняем перевод в проект
-        repo.updateTranslationProgress(
-            project, updatedTranslations, "В процессе");
+        repo.updateTranslationProgress(project, updatedTranslations,
+            "В процессе", syllTranslated, syllNotTranslated);
       } catch (e) {
         emit(SubtitlesError('Ошибка при сохранении файла: $e'));
       }
@@ -66,7 +74,16 @@ class SubtitlesBloc extends Bloc<SubtitlesEvent, SubtitlesState> {
           for (var entry in project.translatedWords.entries)
             int.parse(entry.key): entry.value
         };
-        emit(SubtitlesLoaded(controller.subtitles, translatedWord, project));
+        final syllTranslated = {
+          for (var entry in project.syllablesTranslated.entries)
+            int.parse(entry.key): entry.value
+        };
+        final syllNotTranslated = {
+          for (var entry in project.syllablesNotTranslated.entries)
+            int.parse(entry.key): entry.value
+        };
+        emit(SubtitlesLoaded(controller.subtitles, translatedWord, project,
+            syllTranslated, syllNotTranslated));
       }
     } catch (e) {
       emit(SubtitlesError('Ошибка при загрузке субтитров: $e'));

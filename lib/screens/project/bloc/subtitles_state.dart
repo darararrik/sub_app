@@ -10,15 +10,26 @@ class SubtitlesInitial extends SubtitlesState {}
 class SubtitlesLoaded extends SubtitlesState {
   final List<Subtitle> engSubtitles;
   final Map<int, String> translatedWords;
+  final Map<int, String> syllablesTranslated;
+  final Map<int, String> syllablesNotTranslated;
+
   final Project project;
   SubtitlesLoaded(
     this.engSubtitles,
     this.translatedWords,
     this.project,
+    this.syllablesTranslated,
+    this.syllablesNotTranslated,
   );
 
   @override
-  List<Object?> get props => [engSubtitles, translatedWords, project];
+  List<Object?> get props => [
+        engSubtitles,
+        translatedWords,
+        project,
+        syllablesNotTranslated,
+        syllablesTranslated
+      ];
 }
 
 class Loading extends SubtitlesState {}

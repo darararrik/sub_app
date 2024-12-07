@@ -32,8 +32,11 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       }
 
       final newProject = Project(
-          ObjectId().toString(), event.name, event.engSubtitleFilePath,
-          syllables: {}, imageBytes: imageBytes);
+        ObjectId().toString(),
+        event.name,
+        event.engSubtitleFilePath,
+        imageBytes: imageBytes,
+      );
       repo.createProject(newProject);
       emit(ProjectAddedState());
     } catch (e) {
@@ -124,4 +127,3 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     }
   }
 }
-

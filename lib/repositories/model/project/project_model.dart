@@ -9,7 +9,9 @@ class _Project {
   late String name; // Название проекта
   late String engSubtitleFilePath; // Путь к файлу субтитров
   late Map<String, String> translatedWords; // Путь к файлу субтитров
-  late Map<String, String> syllables = {};
+  late Map<String, String> syllablesNotTranslated = {};
+  late Map<String, String> syllablesTranslated = {};
+
   late Map<String, bool> isExpanded = {};
   late String status = "Не переведено";
 

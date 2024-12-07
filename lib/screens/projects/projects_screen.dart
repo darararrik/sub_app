@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/utils/svg.dart';
@@ -18,6 +19,7 @@ class ProjectsScreen extends StatefulWidget {
 class _ProjectsScreenState extends State<ProjectsScreen> {
   @override
   void initState() {
+    FlutterNativeSplash.remove();
     context.read<ProjectBloc>().add(GetAllProjectsEvent(completer: null));
     super.initState();
   }

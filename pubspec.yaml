@@ -25,10 +25,11 @@ dependencies:
   go_router: ^14.6.2
   flutter_svg: ^2.0.16
   shared_preferences: ^2.3.3
+  flutter_native_splash: ^2.2.17
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_launcher_icons: ^0.14.2
   flutter_lints: ^5.0.0
 
 flutter:
@@ -42,7 +43,6 @@ flutter:
         - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
         - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
 
-
     - family: Montserrat_Alternates
       fonts:
         - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf
@@ -52,3 +52,30 @@ flutter:
   assets:
     - assets/
     - assets/svg/
+    - assets/icon/
+flutter_native_splash:
+  color: "#4F52FF" # Цвет фона экрана загрузки
+  image: assets/splash2.png # Логотип вашего приложения
+  android: true
+  ios: true
+  fullscreen: true # Убирает статус-бар для полноэкранного вида
+  android_12:
+    color: "#4F52FF" # Цвет фона экрана загрузки
+    image: assets/splash2.png # Логотип вашего приложения
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: false
+    image_path: "assets/icon/icon.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: false
+    image_path: "assets/icon/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: false
+    image_path: "assets/icon/icon.png"

@@ -12,14 +12,16 @@ class CardSubtitleWidget extends StatefulWidget {
   final String subtitleWord;
   final Map<int, String> translatedSubtitles;
   final Project project; // Передаем проект
-
-  const CardSubtitleWidget({
-    super.key,
-    required this.index,
-    required this.subtitleWord,
-    required this.translatedSubtitles,
-    required this.project, // Передаем проект
-  });
+  final Map<int, String> syllTranslated;
+  final Map<int, String> syllNotTranslated;
+  const CardSubtitleWidget(
+      {super.key,
+      required this.index,
+      required this.subtitleWord,
+      required this.translatedSubtitles,
+      required this.project,
+      required this.syllTranslated,
+      required this.syllNotTranslated});
 
   @override
   State<CardSubtitleWidget> createState() => _CardSubtitleWidgetState();
@@ -36,8 +38,7 @@ class _CardSubtitleWidgetState extends State<CardSubtitleWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<CardSubtitleCubit, Map<int, bool>>(
       builder: (context, state) {
-        bool isItemExpanded =
-            state[widget.index] ?? true; // Получаем состояние
+        bool isItemExpanded = state[widget.index] ?? true; // Получаем состояние
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +133,10 @@ class _CardSubtitleWidgetState extends State<CardSubtitleWidget> {
               children: [
                 SubtitleDataWidget(subtitleWord: widget.subtitleWord),
                 const SizedBox(width: 12),
-                const SyllableInputWidget(),
+                SyllableInputWidget(
+                  index: widget.index,
+                  syll: widget.syllNotTranslated,
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -143,7 +147,10 @@ class _CardSubtitleWidgetState extends State<CardSubtitleWidget> {
                   translatedSubtitles: widget.translatedSubtitles,
                 ),
                 const SizedBox(width: 12),
-                const SyllableInputWidget(),
+                SyllableInputWidget(
+                  index: widget.index,
+                  syll: widget.syllTranslated,
+                ),
               ],
             )
           ],

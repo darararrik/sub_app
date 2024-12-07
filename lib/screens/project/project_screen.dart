@@ -21,6 +21,8 @@ class ProjectScreen extends StatefulWidget {
 
 class _ProjectScreenState extends State<ProjectScreen> {
   Map<int, String> translatedSubtitles = {};
+  Map<int, String> syllTranslated = {};
+  Map<int, String> syllNotTranslated = {};
 
   @override
   void initState() {
@@ -52,6 +54,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
       body: BlocBuilder<SubtitlesBloc, SubtitlesState>(
         builder: (context, state) {
           if (state is SubtitlesLoaded) {
+            syllNotTranslated = state.syllablesNotTranslated;
+            syllTranslated = state.syllablesTranslated;
             translatedSubtitles = state.translatedWords;
             final project = state.project;
 
@@ -60,14 +64,13 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 context.read<SubtitlesBloc>().add(Save(
                       project: project,
                       translatedData: translatedSubtitles,
+                      syllablesNotTranslated: syllNotTranslated,
+                      syllablesTranslated: syllTranslated,
                     ));
                 return;
               },
-              child: _buildSubtitleList(
-                state.engSubtitles,
-                translatedSubtitles,
-                project,
-              ),
+              child: _buildSubtitleList(state.engSubtitles, translatedSubtitles,
+                  project, syllNotTranslated, syllTranslated),
             );
           }
 
@@ -92,10 +95,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
   }
 
   Widget _buildSubtitleList(
-    List<Subtitle> subtitles,
-    Map<int, String> translatedWords,
-    Project project,
-  ) {
+      List<Subtitle> subtitles,
+      Map<int, String> translatedWords,
+      Project project,
+      syllNotTranslated,
+      syllTranslated) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       itemCount: subtitles.length,
@@ -105,6 +109,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
           subtitleWord: subtitles[index].data,
           translatedSubtitles: translatedSubtitles,
           project: project,
+          syllNotTranslated: syllNotTranslated,
+          syllTranslated: syllTranslated,
         );
       },
     );
