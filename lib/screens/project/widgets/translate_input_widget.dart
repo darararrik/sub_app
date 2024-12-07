@@ -62,10 +62,15 @@ class _TranslateInputWidgetState extends State<TranslateInputWidget> {
             ),
           ),
           hintText: "Введите перевод",
+          hintStyle:  TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: Colors.grey,
+          ),
           labelText: "Перевод",
           labelStyle: const TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 14,
+            fontSize: 16,
             color: Colors.black,
           ),
         ),

@@ -5,7 +5,7 @@ import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/widgets/card_widget.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
-import 'package:sub_app/core/status.dart';
+import 'package:sub_app/core/enum/status.dart';
 
 class HorizntalListProjects extends StatelessWidget {
   const HorizntalListProjects({
@@ -27,9 +27,10 @@ class HorizntalListProjects extends StatelessWidget {
           Text(
             name,
             style: const TextStyle(
+              fontFamily: "Montserrat",
               fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.black54,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
             ),
           ),
           SizedBox(
@@ -86,6 +87,7 @@ class HorizntalListProjects extends StatelessWidget {
   }
 
   void _showProgressBottomSheet(BuildContext context, Project project) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -97,7 +99,7 @@ class HorizntalListProjects extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
                   'Изменить прогресс',
                   style: TextStyle(
@@ -116,8 +118,11 @@ class HorizntalListProjects extends StatelessWidget {
                   tileColor: isSelected
                       ? Colors.blue.withOpacity(0.2)
                       : null, // Цвет фона для выбранного статуса
-                  leading: Icon(status.icon),
-                  title: Text(status.displayName),
+                  leading: status.icon,
+                  title: Text(
+                    status.displayName,
+                    style: theme.textTheme.bodyMedium,
+                  ),
                   onTap: () {
                     selectedStatus =
                         status.displayName; // Устанавливаем выбранный статус

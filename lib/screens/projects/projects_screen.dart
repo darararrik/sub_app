@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
-import 'package:sub_app/core/theme.dart';
+import 'package:sub_app/core/utils/svg.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
-import 'package:sub_app/core/status.dart';
+import 'package:sub_app/core/enum/status.dart';
 import 'package:sub_app/screens/projects/widgets/horizntal_list_projects.dart';
 
 class ProjectsScreen extends StatefulWidget {
@@ -28,22 +28,16 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Переводы",
-          style: TextStyle(fontWeight: FontWeight.w500),
+          "Проекты",
         ),
-        elevation: 4,
-        shadowColor: const Color.fromRGBO(0, 0, 0, 0.2),
+        leading: IconButton(
+            onPressed: () => context.go("/profile"), icon: profileIcon),
         actions: [
           IconButton(
-            onPressed: () {
-              context.go("/signin");
-            },
-            icon: const Icon(
-              Icons.account_circle_outlined,
-              size: 36,
-              color: primaryColor,
-            ),
-          ),
+              onPressed: () {
+                context.go('/newproject');
+              },
+              icon: createProject),
         ],
       ),
       body: BlocListener<SubtitlesBloc, SubtitlesState>(
@@ -132,27 +126,6 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
             }
             return SizedBox();
           },
-        ),
-      ),
-      floatingActionButton: _floatButton(context),
-    );
-  }
-
-  SizedBox _floatButton(BuildContext context) {
-    return SizedBox(
-      width: 180,
-      child: FloatingActionButton(
-        tooltip: 'Создайте новый перевод',
-        onPressed: () {
-          context.go('/newproject');
-        },
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.edit_outlined),
-            SizedBox(width: 12),
-            Text("Новый перевод")
-          ],
         ),
       ),
     );

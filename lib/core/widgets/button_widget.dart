@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:sub_app/core/theme.dart';
 
 class ButtonWidget extends StatelessWidget {
   final String text;
@@ -27,23 +26,26 @@ class ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor:
-              WidgetStateProperty.all(hasColor ? color : Colors.transparent),
-          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(
-                color: Colors.transparent,
-                width: 0,
-              ),
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor:
+            WidgetStateProperty.all(hasColor ? color : Colors.transparent),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(
+              color: Colors.transparent,
+              width: 0,
             ),
           ),
         ),
-        child: Text(text,
-            style: theme.textTheme.labelLarge!.copyWith(
-                fontSize: 18,
-                color: hasColorText ? Colors.white : primaryColor)));
+      ),
+      child: Text(
+        text,
+        style: theme.textTheme.titleSmall!.copyWith(
+            color: hasColorText ? Colors.white : theme.colorScheme.primary,
+            fontWeight: FontWeight.bold),
+      ),
+    );
   }
 }

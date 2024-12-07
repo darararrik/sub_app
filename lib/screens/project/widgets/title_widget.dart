@@ -14,12 +14,15 @@ class TitleWidget extends StatelessWidget {
       children: [
         Text(
           "${index + 1}",
-          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         const SizedBox(width: 10),
         const Text(
           "Строка",
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              fontFamily: "Montserrat_Alternates"),
         ),
       ],
     );

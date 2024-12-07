@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sub_app/core/theme.dart';
+import 'package:sub_app/core/utils/svg.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
-import 'package:sub_app/core/widgets/text_field_widget.dart';
+import 'package:sub_app/core/widgets/input_auth.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -17,11 +17,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    super.initState();
-    context.read<AuthBloc>().add(AuthCheckRequested());
-  }
 
   @override
   void dispose() {
@@ -53,7 +48,13 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Авторизация"),
+        leading: IconButton(onPressed: () => context.pop(), icon: backIcon),
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
@@ -82,44 +83,25 @@ class _SignInScreenState extends State<SignInScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Авторизация",
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.w700,
-                          color: primaryColor,
-                        ),
-                      ),
-                      const Text(
-                        "Введите данные для входа",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      // Поле ввода email
-                      TextFieldWidget(
-                        hintText: "Введите электронную почту",
-                        controller: emailController,
-                        validator: _validateEmail,
-                        labelText: 'Электронная почта',
-                        obscureText: false,
-                      ),
-                      const SizedBox(height: 24),
+                      InputAuth(
+                          label: "Электронная почта",
+                          hintText: "Введите электронную почту",
+                          icon: email,
+                          controller: emailController,
+                          validator: _validateEmail,
+                          obscureText: false),
+                      const SizedBox(height: 16),
+                      InputAuth(
+                          label: "Пароль",
+                          hintText: "Введите пароль",
+                          icon: lock,
+                          controller: passwordController,
+                          validator: _validatePassword,
+                          obscureText: true),
                       // Поле ввода пароля
-                      TextFieldWidget(
-                        controller: passwordController,
-                        obscureText: true,
-                        validator: _validatePassword,
-                        labelText: 'Пароль',
-                        hintText: 'Введите пароль',
-                      ),
                     ],
                   ),
                   const SizedBox(height: 36),
-                  // Кнопка входа
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -135,20 +117,20 @@ class _SignInScreenState extends State<SignInScreen> {
                               );
                         }
                       },
-                      color: primaryColor,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // Кнопка перехода на экран регистрации
                   SizedBox(
                     width: double.infinity,
                     height: 52,
                     child: ButtonWidget(
+                      hasColorText: false,
                       text: 'Создать аккаунт',
                       onPressed: () {
                         context.go("/signup");
                       },
-                      color: const Color.fromARGB(64, 116, 119, 253),
+                      color: const Color.fromRGBO(79, 82, 255, 0.16),
                     ),
                   ),
                 ],

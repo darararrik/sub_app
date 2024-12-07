@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sub_app/core/image.dart';
+import 'package:sub_app/core/utils/images.dart';
+import 'package:sub_app/core/utils/svg.dart';
 import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 
 class PickImageCard extends StatelessWidget {
@@ -40,18 +41,12 @@ class PickImageCard extends StatelessWidget {
               width: 116,
               height: 176,
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Color.fromRGBO(0, 0, 0, 1).withOpacity(0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            const Positioned.fill(
-              child: Center(
-                child: Icon(
-                  Icons.add_a_photo_outlined,
-                  color: Colors.white,
-                  size: 32,
-                ),
-              ),
+            Positioned.fill(
+              child: Center(child: albumIcon),
             ),
           ]
         ],

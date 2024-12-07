@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sub_app/core/utils/svg.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
-import 'package:sub_app/core/widgets/text_field_widget.dart';
+import 'package:sub_app/core/widgets/input_auth.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
@@ -24,6 +25,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Удалить аккаунт'),
+        leading: IconButton(onPressed: () => context.pop(), icon: backIcon),
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthErrorState) {
@@ -44,39 +49,22 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Удаление аккаунта",
-                        style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.w700,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                      Text(
-                        "Введите пароль для подтверждения",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      // Поле ввода пароля
-                      TextFieldWidget(
-                        obscureText: true,
+                      InputAuth(
+                        label: "Пароль",
+                        hintText: "Введите пароль",
+                        icon: lock,
                         controller: controllerPassword,
+                        obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Введите пароль';
                           }
                           return null;
                         },
-                        hintText: 'Введите пароль',
-                        labelText: 'Пароль',
                       ),
                     ],
                   ),
-                  const SizedBox(height: 36),
+                  const SizedBox(height: 40),
                   Column(
                     children: [
                       SizedBox(

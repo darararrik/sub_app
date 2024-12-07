@@ -23,6 +23,8 @@ dependencies:
   cloud_firestore: ^5.5.1
   rename: ^3.0.2
   go_router: ^14.6.2
+  flutter_svg: ^2.0.16
+  shared_preferences: ^2.3.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -31,6 +33,22 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
+
+
+    - family: Montserrat_Alternates
+      fonts:
+        - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf
+        - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf
+        - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf
 
   assets:
     - assets/
+    - assets/svg/

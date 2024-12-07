@@ -13,4 +13,5 @@ abstract interface class IProjectRepo {
     Project project,
     Map<String, bool> isExpanded,
   );
+  int getTotalProjectsCreated();
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sub_app/core/utils/svg.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:subtitle/subtitle.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
@@ -32,6 +33,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: () => context.pop(), icon: backIcon),
         title: BlocBuilder<SubtitlesBloc, SubtitlesState>(
           builder: (context, state) {
             if (state is SubtitlesLoaded) {
@@ -40,24 +42,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
             return const Text("Проект");
           },
         ),
-        elevation: 4,
-        shadowColor: const Color.fromRGBO(0, 0, 0, 0.2),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                context.pop();
-              },
-              child: const Text(
-                "Сохранить",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
+              padding: const EdgeInsets.only(right: 8.0),
+              child:
+                  IconButton(onPressed: () => context.pop(), icon: saveicon)),
         ],
       ),
       body: BlocBuilder<SubtitlesBloc, SubtitlesState>(

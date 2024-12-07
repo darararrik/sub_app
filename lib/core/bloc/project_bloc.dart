@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
-import 'package:sub_app/core/status.dart';
+import 'package:sub_app/core/enum/status.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo_interface.dart';
 

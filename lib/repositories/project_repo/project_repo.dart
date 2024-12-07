@@ -1,16 +1,32 @@
 import 'package:realm/realm.dart';
+import 'package:sub_app/core/utils/get_it.dart';
 import 'package:sub_app/repositories/model/project/project_model.dart';
 import 'package:sub_app/repositories/project_repo/project_repo_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProjectRepo implements IProjectRepo {
   final Realm realm;
+  final SharedPreferences sharedPreferences = getIt<SharedPreferences>();
 
   ProjectRepo(this.realm);
 
   /// Создать новый проект
   @override
-  void createProject(Project newProject) {
+  Future<void> createProject(Project newProject) async {
+    // Увеличиваем счётчик созданных проектов
+    _incrementProjectCount();
+
+    // Добавляем проект в Realm
     realm.write(() => realm.add(newProject));
+  }
+  void _incrementProjectCount() {
+    final currentCount = sharedPreferences.getInt('project_count') ?? 0;
+    sharedPreferences.setInt('project_count', currentCount + 1);
+  }
+
+  @override
+  int getTotalProjectsCreated() {
+    return sharedPreferences.getInt('project_count') ?? 0;
   }
 
   /// Удалить все проекты

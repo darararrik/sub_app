@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sub_app/core/theme.dart';
+import 'package:sub_app/core/utils/svg.dart';
 import 'package:sub_app/core/widgets/button_widget.dart';
-import 'package:sub_app/core/widgets/text_field_widget.dart';
+import 'package:sub_app/core/widgets/input_auth.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -28,7 +28,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Регистрация"),
+        leading: IconButton(onPressed: () => context.pop(), icon: backIcon),
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
@@ -51,61 +57,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Создайте аккаунт",
-                        style: TextStyle(
-                            fontSize: 36,
-                            color: primaryColor,
-                            fontWeight: FontWeight.w700),
+                      InputAuth(
+                        label: "Электронная почта",
+                        hintText: "Введите электронную почту",
+                        icon: email,
+                        controller: emailController,
+                        validator: _validateEmail,
+                        obscureText: false,
                       ),
-                      Text(
-                        "Введите детали",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400),
+                      const SizedBox(height: 16),
+                      InputAuth(
+                        label: "Пароль",
+                        hintText: "Введите пароль",
+                        icon: lock,
+                        controller: passwordController1,
+                        validator: _validatePassword,
+                        obscureText: true,
                       ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Column(
-                        children: [
-                          Column(
-                            children: [
-                              TextFieldWidget(
-                                obscureText: false,
-                                controller: emailController,
-                                validator: _validateEmail,
-                                hintText: 'Введи электронную почту',
-                                labelText: 'Электронная почта',
-                              ),
-                              const SizedBox(height: 24),
-                              TextFieldWidget(
-                                hintText: "Пароль",
-                                controller: passwordController1,
-                                obscureText: true,
-                                validator: _validatePassword,
-                                labelText: 'Введите пароль',
-                              ),
-                              const SizedBox(height: 24),
-                              TextFieldWidget(
-                                controller: passwordController2,
-                                obscureText: true,
-                                validator: _validateConfirmPassword,
-                                hintText: 'Повторно введите пароль',
-                                labelText: 'Повторите пароль',
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 36),
-                        ],
+                      const SizedBox(height: 16),
+                      InputAuth(
+                        label: "Повторите пароль",
+                        hintText: "Повторно введите пароль",
+                        icon: lock,
+                        controller: passwordController2,
+                        validator: _validateConfirmPassword,
+                        obscureText: true,
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 40,
                   ),
                   Column(
                     children: [
@@ -124,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ));
                             }
                           },
-                          color: primaryColor,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                       SizedBox(
@@ -134,11 +119,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         height: 52,
                         child: ButtonWidget(
+                          hasColorText: false,
                           text: 'Войти',
                           onPressed: () {
                             context.go("/signin");
                           },
-                          color: const Color.fromARGB(64, 116, 119, 253),
+                          color: const Color.fromRGBO(79, 82, 255, 0.16),
                         ),
                       ),
                     ],
