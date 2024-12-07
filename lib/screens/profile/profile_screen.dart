@@ -139,10 +139,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: 8,
             ),
-            Text(
-              user.email,
-              style: theme.textTheme.titleSmall!
-                  .copyWith(fontWeight: FontWeight.w500),
+            SizedBox(
+              child: Text(
+                user.email,
+                overflow: TextOverflow.fade,
+                style: theme.textTheme.titleSmall!
+                    .copyWith(fontWeight: FontWeight.w500,fontSize: 16),
+              ),
             ),
           ],
         )

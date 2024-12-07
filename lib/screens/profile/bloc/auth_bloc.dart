@@ -45,10 +45,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         currentPassword: event.currentPassword,
       );
       emit(Unauthenticated());
-    } on FirebaseAuthException catch (e) {
-      emit(AuthErrorState(error: e.message));
     } catch (e) {
       emit(const AuthErrorState(error: 'Не удалось удалить аккаунт.'));
+    } finally {
+      if (state is! AuthErrorState) {
+        emit(Unauthenticated()); // Выводим неавторизованный статус
+      } else {
+        final user = await _authRepository.getCurrentUser();
+        emit(AuthSuccess(user!));
+      }
     }
   }
 

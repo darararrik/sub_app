@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sub_app/core/bloc/project_bloc.dart';
 import 'package:sub_app/core/cubit/sub_pick_cubit.dart';
 import 'package:sub_app/core/utils/get_it.dart';
@@ -12,8 +11,9 @@ import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
 import 'package:sub_app/screens/project/cubit/card_subtitle_cubit.dart';
 
 class SubApp extends StatelessWidget {
-  const SubApp({super.key});
-
+  const SubApp({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
