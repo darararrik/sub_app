@@ -34,20 +34,20 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  fonts:
-    - family: Montserrat
-      fonts:
-        - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
-        - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
-        - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
-        - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
-        - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
+  # fonts:
+  #   - family: Montserrat
+  #     fonts:
+  #       - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
+  #       - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
+  #       - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
+  #       - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
+  #       - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
 
-    - family: Montserrat_Alternates
-      fonts:
-        - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf
-        - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf
-        - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf
+  #   - family: Montserrat_Alternates
+  #     fonts:
+  #       - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf
+  #       - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf
+  #       - asset: assets/fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf
 
   assets:
     - assets/

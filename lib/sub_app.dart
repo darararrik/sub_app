@@ -9,6 +9,7 @@ import 'package:sub_app/screens/new_project/cubit/pick_image_cubit.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 import 'package:sub_app/screens/project/bloc/subtitles_bloc.dart';
 import 'package:sub_app/screens/project/cubit/card_subtitle_cubit.dart';
+import 'package:sub_app/screens/start/bloc/page_view_bloc.dart';
 
 class SubApp extends StatelessWidget {
   const SubApp({
@@ -25,6 +26,10 @@ class SubApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<SubPickCubit>()),
         BlocProvider(create: (context) => getIt<AuthBloc>()),
         BlocProvider(create: (context) => getIt<CardSubtitleCubit>()),
+        BlocProvider(
+          create: (context) =>
+              getIt<OnbordingBloc>()..add(OnbordingCheckFirstLaunch()),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: appRouter,

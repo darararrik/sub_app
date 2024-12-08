@@ -144,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 user.email,
                 overflow: TextOverflow.fade,
                 style: theme.textTheme.titleSmall!
-                    .copyWith(fontWeight: FontWeight.w500,fontSize: 16),
+                    .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
               ),
             ),
           ],

@@ -8,6 +8,7 @@ import 'package:sub_app/screens/new_project/new_project_screen.dart';
 import 'package:sub_app/screens/profile/profile_screen.dart';
 import 'package:sub_app/screens/project/project_screen.dart';
 import 'package:sub_app/screens/projects/projects_screen.dart';
+import 'package:sub_app/screens/start/start.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -24,9 +25,12 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const NewProjectScreen(),
         ),
         GoRoute(
+          path: 'start',
+          builder: (context, state) => const StartScreen(),
+        ),
+        GoRoute(
           path: 'project',
           builder: (context, state) {
-            // Проверяем, что extra не null и правильного типа
             final id = state.extra as String;
             return ProjectScreen(projectId: id);
           },
