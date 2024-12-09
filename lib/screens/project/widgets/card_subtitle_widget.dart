@@ -139,7 +139,7 @@ class _CardSubtitleWidgetState extends State<CardSubtitleWidget> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             Row(
               children: [
                 TranslateInputWidget(

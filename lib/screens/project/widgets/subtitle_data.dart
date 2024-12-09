@@ -19,7 +19,7 @@ class SubtitleDataWidget extends StatelessWidget {
         ),
         child: Text(
           subtitleWord,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400, fontFamily: "Montserrat"),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Montserrat"),
         ),
       ),
     );

@@ -11,8 +11,8 @@ sealed class OnbordingState extends Equatable {
 final class OnbordingInitial extends OnbordingState {}
 
 class OnbordingUpdated extends OnbordingState {
-  int pageIndex;
-  OnbordingUpdated({
+  final int pageIndex;
+  const OnbordingUpdated({
     required this.pageIndex,
   });
 }

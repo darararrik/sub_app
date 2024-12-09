@@ -120,13 +120,13 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     children: [
                       Text(
                         'Пока что здесь пусто!',
-                        style: TextStyle(fontSize: 40),
+                        style: TextStyle(fontSize: 24),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 12),
                       Text(
                         'Создайте новый проект',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ],

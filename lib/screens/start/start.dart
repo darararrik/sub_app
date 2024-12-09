@@ -11,20 +11,35 @@ class StartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appBarBool = false;
     FlutterNativeSplash.remove();
-    return Scaffold(
-      body: BlocConsumer<OnbordingBloc, OnbordingState>(
-        listener: (context, state) {
-          if (state is OnbordingSkipped) {
-            context.pop();
-          }
-        },
-        builder: (context, state) {
-          if (state is OnbordingUpdated) {
-            final pageIndex = state.pageIndex;
-            final pageController = PageController(initialPage: pageIndex);
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return BlocConsumer<OnbordingBloc, OnbordingState>(
+      listener: (context, state) {
+        if (state is OnbordingSkipped) {
+          context.pop();
+        }
+      },
+      builder: (context, state) {
+        if (state is OnbordingUpdated) {
+          final pageIndex = state.pageIndex;
+          final pageController = PageController(initialPage: pageIndex);
+          return Scaffold(
+            appBar: appBarBool
+                ? AppBar(
+                    backgroundColor: Colors.transparent,
+                    leading: IconButton(
+                        onPressed: () {
+                          pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          if (pageIndex == 1) appBarBool = false;
+                        },
+                        icon: backIconBlack),
+                  )
+                : null,
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
@@ -44,7 +59,6 @@ class StartScreen extends StatelessWidget {
                         title: 'Переводите просто',
                         label:
                             'Переводите с лёгкостью в минималистичном редакторе субтитров',
-                        backButton: false,
                       ),
                       OnbordingScreen(
                         pageController: pageController,
@@ -71,8 +85,8 @@ class StartScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 60),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0)
+                      .copyWith(bottom: 36),
                   child: SizedBox(
                     width: double.infinity,
                     height: 56,
@@ -88,18 +102,19 @@ class StartScreen extends StatelessWidget {
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
+                            appBarBool = true;
                           }
                         },
                         color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
               ],
-            );
-          } else {
-            return SizedBox();
-          }
-        },
-      ),
+            ),
+          );
+        } else {
+          return SizedBox();
+        }
+      },
     );
   }
 }
@@ -109,7 +124,6 @@ class OnbordingScreen extends StatelessWidget {
   final String title;
   final String label;
   final PageController pageController;
-  final bool backButton;
 
   const OnbordingScreen({
     super.key,
@@ -117,22 +131,11 @@ class OnbordingScreen extends StatelessWidget {
     required this.title,
     required this.pageController,
     required this.label,
-    this.backButton = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: backButton
-          ? AppBar(
-              backgroundColor: Colors.transparent,
-              leading: IconButton(
-                  onPressed: () => pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      ),
-                  icon: backIconBlack))
-          : null,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
