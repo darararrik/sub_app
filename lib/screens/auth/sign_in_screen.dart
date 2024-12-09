@@ -72,7 +72,6 @@ class _SignInScreenState extends State<SignInScreen> {
           if (state is AuthLoadingState) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Form(

@@ -42,8 +42,8 @@ class StartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 700,
+                Flexible(
+                  flex: 6,
                   child: PageView(
                     controller: pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -84,28 +84,31 @@ class StartScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0)
-                      .copyWith(bottom: 36),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ButtonWidget(
-                        text: pageIndex == 3 ? "Начать работу" : "Далее",
-                        onPressed: () {
-                          if (pageIndex == 3) {
-                            context
-                                .read<OnbordingBloc>()
-                                .add(OnbordingCompleted());
-                          } else {
-                            pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                            appBarBool = true;
-                          }
-                        },
-                        color: Theme.of(context).colorScheme.primary),
+                Flexible(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0)
+                        .copyWith(bottom: 36),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ButtonWidget(
+                          text: pageIndex == 3 ? "Начать работу" : "Далее",
+                          onPressed: () {
+                            if (pageIndex == 3) {
+                              context
+                                  .read<OnbordingBloc>()
+                                  .add(OnbordingCompleted());
+                            } else {
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                              appBarBool = true;
+                            }
+                          },
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
                   ),
                 ),
               ],

@@ -7,7 +7,7 @@ final lightTheme = ThemeData(
       bodyMedium: TextStyle(
           fontFamily: "Montserrat", fontSize: 16, fontWeight: FontWeight.w400),
       titleSmall: TextStyle(
-          fontFamily: "Montserrat", fontSize: 20, fontWeight: FontWeight.w600),
+          fontFamily: "Montserrat", fontSize: 20, fontWeight: FontWeight.w500),
     ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
