@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_app/core/utils/svg.dart';
+import 'package:sub_app/core/widgets/button_widget.dart';
 import 'package:sub_app/repositories/model/user/user.dart';
 import 'package:sub_app/screens/profile/bloc/auth_bloc.dart';
 
@@ -33,12 +34,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is Unauthenticated) {
+          if (state is UnauthenticatedState) {
             context.go("/signin");
           }
         },
         builder: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthSuccessState) {
             user = User.fromFirebaseUser(state.user);
             return Padding(
               padding:
@@ -76,9 +77,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             );
           }
-          if (state is AuthLoading) {
+          if (state is AuthLoadingState) {
             return Center(
               child: CircularProgressIndicator(),
+            );
+          }
+          if (state is ConfirmState) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Вы вышли из аккаунта!",
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          "Вы всегда сможете войти снова, если захотите!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromARGB(255, 110, 110, 110)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 36.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ButtonWidget(
+                            text: "Продолжить",
+                            onPressed: () => context.go("/"),
+                            color: theme.colorScheme.primary),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             );
           }
           return const SizedBox();
@@ -158,7 +209,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context) => [
         PopupMenuItem(
           child: const Text('Выйти'),
-          onTap: () => context.read<AuthBloc>().add(SignOutRequested()),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Вы уверены, что хотите выйти?'),
+                  content: const Text(
+                      'Ваше устройство не сможет синхронизировать переводы, пока вы не войдёте в аккаунт. С проектами, которые уже на данном устройстве, ничего не случится.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      child: const Text('Отмена'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.pop();
+                        context.read<AuthBloc>().add(SignOutRequested());
+                      },
+                      child: const Text(
+                        'Выйти',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
         ),
         PopupMenuItem(
             child: const Text('Сменить пароль'),

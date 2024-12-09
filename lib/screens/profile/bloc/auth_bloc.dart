@@ -21,7 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       UpdatePasswordRequested event, Emitter<AuthState> emit) async {
     final User? user;
     try {
-      emit(AuthLoading());
+      emit(AuthLoadingState());
       await _authRepository.updatePassword(
         newPassword: event.newPassword,
         currentPassword: event.currentPassword,
@@ -33,51 +33,50 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthErrorState(error: 'Не удалось обновить пароль.'));
     } finally {
       user = await _authRepository.getCurrentUser();
-      emit(AuthSuccess(user!));
+      emit(AuthSuccessState(user!));
     }
   }
 
   Future<void> _onDeleteAccountRequested(
       DeleteAccountRequested event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(AuthLoadingState());
     try {
       await _authRepository.deleteAccount(
         currentPassword: event.currentPassword,
       );
-      emit(Unauthenticated());
     } catch (e) {
       emit(const AuthErrorState(error: 'Не удалось удалить аккаунт.'));
     } finally {
       if (state is! AuthErrorState) {
-        emit(Unauthenticated()); // Выводим неавторизованный статус
+        emit(ConfirmState());
       } else {
         final user = await _authRepository.getCurrentUser();
-        emit(AuthSuccess(user!));
+        emit(AuthSuccessState(user!));
       }
     }
   }
 
   Future<void> _onAuthCheckRequested(
       AuthCheckRequested event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(AuthLoadingState());
     final user = await _authRepository.getCurrentUser();
     if (user != null) {
-      emit(AuthSuccess(user));
+      emit(AuthSuccessState(user));
     } else {
-      emit(Unauthenticated());
+      emit(UnauthenticatedState());
     }
   }
 
   Future<void> _onSignOutRequested(
       SignOutRequested event, Emitter<AuthState> emit) async {
     await _authRepository.signOut();
-    emit(Unauthenticated());
+    emit(ConfirmState());
   }
 
   Future<void> _onSignInRequested(
       SignInRequested event, Emitter<AuthState> emit) async {
     try {
-      emit(AuthLoading()); // Показываем индикатор загрузки
+      emit(AuthLoadingState()); // Показываем индикатор загрузки
       final user = await _authRepository.signInWithEmailAndPassword(
         email: event.email,
         password: event.password,
@@ -86,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user == null) {
         emit(const AuthErrorState(error: 'Произошла ошибка.'));
       } else {
-        emit(AuthSuccess(user)); // Успех, если пользователь авторизован
+        emit(AuthSuccessState(user)); // Успех, если пользователь авторизован
       }
     } on FirebaseAuthException catch (e) {
       // Обработка ошибок Firebase
@@ -98,8 +97,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Закрытие состояния загрузки, если оно еще не закрыто
       // Мы гарантируем, что загрузка будет завершена в любом случае.
       // Это гарантирует, что даже если ошибка произошла, состояние загрузки завершится.
-      if (!(state is AuthSuccess || state is AuthErrorState)) {
-        emit(Unauthenticated()); // Выводим неавторизованный статус
+      if (!(state is AuthSuccessState || state is AuthErrorState)) {
+        emit(UnauthenticatedState()); // Выводим неавторизованный статус
       }
     }
   }
@@ -107,7 +106,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onSignUpRequested(
       SignUpRequested event, Emitter<AuthState> emit) async {
     try {
-      emit(AuthLoading());
+      emit(AuthLoadingState());
 
       final user = await _authRepository.createUser(
         email: event.email,
@@ -115,10 +114,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       if (user == null) {
         emit(const AuthErrorState(error: 'Произошла ошибка.'));
-        emit(Unauthenticated());
+        emit(UnauthenticatedState());
       } else {
         await _authRepository.saveUserDataToFirestore(email: event.email);
-        emit(AuthSuccess(user));
+        emit(AuthSuccessState(user));
       }
     } on FirebaseAuthException catch (e) {
       emit(AuthErrorState(error: e.message));
@@ -128,8 +127,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Закрытие состояния загрузки, если оно еще не закрыто
       // Мы гарантируем, что загрузка будет завершена в любом случае.
       // Это гарантирует, что даже если ошибка произошла, состояние загрузки завершится.
-      if (!(state is AuthSuccess || state is AuthErrorState)) {
-        emit(Unauthenticated()); // Выводим неавторизованный статус
+      if (!(state is AuthSuccessState || state is AuthErrorState)) {
+        emit(UnauthenticatedState()); // Выводим неавторизованный статус
       }
     }
   }

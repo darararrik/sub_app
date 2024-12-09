@@ -68,9 +68,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 }
               },
               builder: (context, state) {
-                if (state is AuthLoading) {
+                if (state is AuthLoadingState) {
                   return const Center(child: CircularProgressIndicator());
                 }
+
                 return SizedBox(
                   width: double.infinity,
                   height: 52,

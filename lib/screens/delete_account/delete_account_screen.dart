@@ -24,6 +24,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Удалить аккаунт'),
@@ -39,6 +40,56 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
           }
         },
         builder: (context, state) {
+          if (state is ConfirmState) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Аккаунт удалён!",
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          "Вы всегда сможете зарегистрироваться снова, если захотите!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromARGB(255, 110, 110, 110)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 36.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ButtonWidget(
+                            text: "Продолжить",
+                            onPressed: () => context.go("/"),
+                            color: theme.colorScheme.primary),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Form(

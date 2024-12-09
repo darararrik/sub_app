@@ -57,7 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthSuccessState) {
             context.go("/profile");
           } else if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -69,7 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
           }
         },
         builder: (BuildContext context, AuthState state) {
-          if (state is AuthLoading) {
+          if (state is AuthLoadingState) {
             return const Center(child: CircularProgressIndicator());
           }
 
