@@ -97,6 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text(
                           "Вы вышли из аккаунта!",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 32, fontWeight: FontWeight.w500),
                         ),

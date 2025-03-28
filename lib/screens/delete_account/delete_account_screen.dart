@@ -55,6 +55,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       children: [
                         Text(
                           "Аккаунт удалён!",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 32, fontWeight: FontWeight.w500),
                         ),
